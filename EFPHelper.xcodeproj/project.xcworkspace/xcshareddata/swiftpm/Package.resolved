@@ -1,0 +1,24 @@
+{
+  "originHash" : "1820e6927fc6714a9651edada8380632c65f490be1b5813a7c0abb71457dd4a5",
+  "pins" : [
+    {
+      "identity" : "swxmlhash",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/drmohundro/SWXMLHash.git",
+      "state" : {
+        "revision" : "a853604c9e9a83ad9954c7e3d2a565273982471f",
+        "version" : "7.0.2"
+      }
+    },
+    {
+      "identity" : "webdavkitswift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/fanjiashu/WebDAVKitSwift",
+      "state" : {
+        "revision" : "963e357720c405b24a62a6dd2c4917c84594534a",
+        "version" : "1.2.27"
+      }
+    }
+  ],
+  "version" : 3
+}

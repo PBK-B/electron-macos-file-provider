@@ -12,5 +12,6 @@ int main(int argc, const char * argv[]) {
         // Setup code that might create autoreleased objects goes here.
     }
     printf("hello");
+    [[NSApplication sharedApplication] run];
     return 1;
 }

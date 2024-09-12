@@ -1,7 +1,7 @@
 <!--
  * @Author: Bin
  * @Date: 2024-09-12
- * @FilePath: /EleFileProvider/README.md
+ * @FilePath: /EFPHelper/README.md
 -->
 
 # Electron Expand Apple FileProvider for MacOS
@@ -14,6 +14,6 @@
 ## APIs
 
 
-## Support
+## Supports
 
 - [x] WebDAV Storage

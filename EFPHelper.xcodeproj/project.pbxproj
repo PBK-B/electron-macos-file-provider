@@ -14,6 +14,9 @@
 		340CF6112C929631004C6051 /* FileProviderItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 340CF6102C929631004C6051 /* FileProviderItem.swift */; };
 		340CF6132C929631004C6051 /* FileProviderEnumerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 340CF6122C929631004C6051 /* FileProviderEnumerator.swift */; };
 		340CF6182C929631004C6051 /* EleFileProvider.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 340CF60B2C929631004C6051 /* EleFileProvider.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		340CF61E2C929DDE004C6051 /* WebDavKit in Frameworks */ = {isa = PBXBuildFile; productRef = 340CF61D2C929DDE004C6051 /* WebDavKit */; };
+		340CF6202C929F47004C6051 /* WebDAVFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 340CF61F2C929F47004C6051 /* WebDAVFileManager.swift */; };
+		340CF6222C929F89004C6051 /* FileProviderLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 340CF6212C929F89004C6051 /* FileProviderLogger.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +55,8 @@
 		340CF6122C929631004C6051 /* FileProviderEnumerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileProviderEnumerator.swift; sourceTree = "<group>"; };
 		340CF6142C929631004C6051 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		340CF6152C929631004C6051 /* EleFileProvider.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = EleFileProvider.entitlements; sourceTree = "<group>"; };
+		340CF61F2C929F47004C6051 /* WebDAVFileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebDAVFileManager.swift; sourceTree = "<group>"; };
+		340CF6212C929F89004C6051 /* FileProviderLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileProviderLogger.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +71,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				340CF61E2C929DDE004C6051 /* WebDavKit in Frameworks */,
 				340CF60C2C929631004C6051 /* UniformTypeIdentifiers.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -118,6 +124,8 @@
 				340CF6122C929631004C6051 /* FileProviderEnumerator.swift */,
 				340CF6142C929631004C6051 /* Info.plist */,
 				340CF6152C929631004C6051 /* EleFileProvider.entitlements */,
+				340CF61F2C929F47004C6051 /* WebDAVFileManager.swift */,
+				340CF6212C929F89004C6051 /* FileProviderLogger.swift */,
 			);
 			path = EleFileProvider;
 			sourceTree = "<group>";
@@ -157,6 +165,9 @@
 			dependencies = (
 			);
 			name = EleFileProvider;
+			packageProductDependencies = (
+				340CF61D2C929DDE004C6051 /* WebDavKit */,
+			);
 			productName = EleFileProvider;
 			productReference = 340CF60B2C929631004C6051 /* EleFileProvider.appex */;
 			productType = "com.apple.product-type.app-extension";
@@ -188,6 +199,9 @@
 				Base,
 			);
 			mainGroup = 340CF5CD2C92918A004C6051;
+			packageReferences = (
+				340CF61C2C929DDE004C6051 /* XCRemoteSwiftPackageReference "WebDAVKitSwift" */,
+			);
 			productRefGroup = 340CF5D72C92918A004C6051 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -231,7 +245,9 @@
 			files = (
 				340CF60F2C929631004C6051 /* FileProviderExtension.swift in Sources */,
 				340CF6112C929631004C6051 /* FileProviderItem.swift in Sources */,
+				340CF6202C929F47004C6051 /* WebDAVFileManager.swift in Sources */,
 				340CF6132C929631004C6051 /* FileProviderEnumerator.swift in Sources */,
+				340CF6222C929F89004C6051 /* FileProviderLogger.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -501,6 +517,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		340CF61C2C929DDE004C6051 /* XCRemoteSwiftPackageReference "WebDAVKitSwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/fanjiashu/WebDAVKitSwift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.2.27;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		340CF61D2C929DDE004C6051 /* WebDavKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 340CF61C2C929DDE004C6051 /* XCRemoteSwiftPackageReference "WebDAVKitSwift" */;
+			productName = WebDavKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 340CF5CE2C92918A004C6051 /* Project object */;
 }
