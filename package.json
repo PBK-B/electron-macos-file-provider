@@ -8,7 +8,9 @@
     "doc": "docs"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev:init": "node-gyp configure",
+    "dev:build": "node-gyp build --debug"
   },
   "repository": {
     "type": "git",
@@ -28,5 +30,12 @@
   "bugs": {
     "url": "https://github.com/PBK-B/electron-macos-file-provider/issues"
   },
-  "homepage": "https://github.com/PBK-B/electron-macos-file-provider#readme"
+  "homepage": "https://github.com/PBK-B/electron-macos-file-provider#readme",
+  "dependencies": {
+    "bindings": "^1.5.0",
+    "node-addon-api": "*"
+  },
+  "devDependencies": {
+    "node-gyp": "^10.2.0"
+  }
 }
