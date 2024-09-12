@@ -1,0 +1,32 @@
+{
+  "name": "electron-macos-file-provider",
+  "version": "1.0.0",
+  "description": "Apple FileProvider for macos using the N-API extension electron",
+  "main": "index.js",
+  "private": true,
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PBK-B/electron-macos-file-provider.git"
+  },
+  "keywords": [
+    "electron",
+    "file-provider",
+    "extension",
+    "apple",
+    "macos",
+    "osx",
+    "n-api"
+  ],
+  "author": "PBK-B",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PBK-B/electron-macos-file-provider/issues"
+  },
+  "homepage": "https://github.com/PBK-B/electron-macos-file-provider#readme"
+}
