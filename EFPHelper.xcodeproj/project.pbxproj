@@ -13,14 +13,15 @@
 		340CF60F2C929631004C6051 /* FileProviderExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 340CF60E2C929631004C6051 /* FileProviderExtension.swift */; };
 		340CF6112C929631004C6051 /* FileProviderItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 340CF6102C929631004C6051 /* FileProviderItem.swift */; };
 		340CF6132C929631004C6051 /* FileProviderEnumerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 340CF6122C929631004C6051 /* FileProviderEnumerator.swift */; };
-		340CF6182C929631004C6051 /* EleFileProvider.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 340CF60B2C929631004C6051 /* EleFileProvider.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		340CF61E2C929DDE004C6051 /* WebDavKit in Frameworks */ = {isa = PBXBuildFile; productRef = 340CF61D2C929DDE004C6051 /* WebDavKit */; };
 		340CF6202C929F47004C6051 /* WebDAVFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 340CF61F2C929F47004C6051 /* WebDAVFileManager.swift */; };
 		340CF6222C929F89004C6051 /* FileProviderLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 340CF6212C929F89004C6051 /* FileProviderLogger.swift */; };
+		340CF6422C9314A3004C6051 /* WebDavKit in Frameworks */ = {isa = PBXBuildFile; productRef = 340CF6412C9314A3004C6051 /* WebDavKit */; };
+		340CF6592C931934004C6051 /* EleFileProvider.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 340CF60B2C929631004C6051 /* EleFileProvider.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		340DFA7E2C940A8D00585255 /* WebDavKit in Frameworks */ = {isa = PBXBuildFile; productRef = 340DFA7D2C940A8D00585255 /* WebDavKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		340CF6162C929631004C6051 /* PBXContainerItemProxy */ = {
+		340CF65A2C931934004C6051 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 340CF5CE2C92918A004C6051 /* Project object */;
 			proxyType = 1;
@@ -30,13 +31,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		340CF6062C92919E004C6051 /* Embed Foundation Extensions */ = {
+		340CF65C2C931934004C6051 /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				340CF6182C929631004C6051 /* EleFileProvider.appex in Embed Foundation Extensions */,
+				340CF6592C931934004C6051 /* EleFileProvider.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -57,6 +58,7 @@
 		340CF6152C929631004C6051 /* EleFileProvider.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = EleFileProvider.entitlements; sourceTree = "<group>"; };
 		340CF61F2C929F47004C6051 /* WebDAVFileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebDAVFileManager.swift; sourceTree = "<group>"; };
 		340CF6212C929F89004C6051 /* FileProviderLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileProviderLogger.swift; sourceTree = "<group>"; };
+		340CF6582C9317E6004C6051 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +66,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				340CF6422C9314A3004C6051 /* WebDavKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -71,7 +74,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				340CF61E2C929DDE004C6051 /* WebDavKit in Frameworks */,
+				340DFA7E2C940A8D00585255 /* WebDavKit in Frameworks */,
 				340CF60C2C929631004C6051 /* UniformTypeIdentifiers.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -101,6 +104,7 @@
 		340CF5D82C92918A004C6051 /* EFPHelper */ = {
 			isa = PBXGroup;
 			children = (
+				340CF6582C9317E6004C6051 /* Info.plist */,
 				340CF5DF2C92918C004C6051 /* Assets.xcassets */,
 				340CF5E42C92918C004C6051 /* main.m */,
 				340CF5E62C92918C004C6051 /* EFPHelper.entitlements */,
@@ -140,14 +144,17 @@
 				340CF5D22C92918A004C6051 /* Sources */,
 				340CF5D32C92918A004C6051 /* Frameworks */,
 				340CF5D42C92918A004C6051 /* Resources */,
-				340CF6062C92919E004C6051 /* Embed Foundation Extensions */,
+				340CF65C2C931934004C6051 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				340CF6172C929631004C6051 /* PBXTargetDependency */,
+				340CF65B2C931934004C6051 /* PBXTargetDependency */,
 			);
 			name = EFPHelper;
+			packageProductDependencies = (
+				340CF6412C9314A3004C6051 /* WebDavKit */,
+			);
 			productName = EFPHelper;
 			productReference = 340CF5D62C92918A004C6051 /* EFPHelper.app */;
 			productType = "com.apple.product-type.application";
@@ -166,7 +173,7 @@
 			);
 			name = EleFileProvider;
 			packageProductDependencies = (
-				340CF61D2C929DDE004C6051 /* WebDavKit */,
+				340DFA7D2C940A8D00585255 /* WebDavKit */,
 			);
 			productName = EleFileProvider;
 			productReference = 340CF60B2C929631004C6051 /* EleFileProvider.appex */;
@@ -254,10 +261,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		340CF6172C929631004C6051 /* PBXTargetDependency */ = {
+		340CF65B2C931934004C6051 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 340CF60A2C929631004C6051 /* EleFileProvider */;
-			targetProxy = 340CF6162C929631004C6051 /* PBXContainerItemProxy */;
+			targetProxy = 340CF65A2C931934004C6051 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -380,16 +387,17 @@
 		340CF5EA2C92918C004C6051 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = EFPHelper/EFPHelper.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = HRKZ3529S5;
+				DEVELOPMENT_TEAM = A6954X9WMS;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = EFPHelper/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSMainStoryboardFile = Main;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
@@ -398,8 +406,9 @@
 					"@executable_path/../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.pbkhub.EFPHelper;
+				PRODUCT_BUNDLE_IDENTIFIER = cloud.lazycat.client;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 			};
 			name = Debug;
@@ -407,16 +416,17 @@
 		340CF5EB2C92918C004C6051 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = EFPHelper/EFPHelper.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = HRKZ3529S5;
+				DEVELOPMENT_TEAM = A6954X9WMS;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = EFPHelper/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSMainStoryboardFile = Main;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
@@ -425,8 +435,9 @@
 					"@executable_path/../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.pbkhub.EFPHelper;
+				PRODUCT_BUNDLE_IDENTIFIER = cloud.lazycat.client;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 			};
 			name = Release;
@@ -437,7 +448,7 @@
 				CODE_SIGN_ENTITLEMENTS = EleFileProvider/EleFileProvider.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = HRKZ3529S5;
+				DEVELOPMENT_TEAM = A6954X9WMS;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = EleFileProvider/Info.plist;
@@ -449,7 +460,7 @@
 					"@executable_path/../../../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.pbkhub.EFPHelper.EleFileProvider;
+				PRODUCT_BUNDLE_IDENTIFIER = cloud.lazycat.client.hclientFileProvider;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
@@ -465,7 +476,7 @@
 				CODE_SIGN_ENTITLEMENTS = EleFileProvider/EleFileProvider.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = HRKZ3529S5;
+				DEVELOPMENT_TEAM = A6954X9WMS;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = EleFileProvider/Info.plist;
@@ -477,7 +488,7 @@
 					"@executable_path/../../../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.pbkhub.EFPHelper.EleFileProvider;
+				PRODUCT_BUNDLE_IDENTIFIER = cloud.lazycat.client.hclientFileProvider;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -530,7 +541,12 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		340CF61D2C929DDE004C6051 /* WebDavKit */ = {
+		340CF6412C9314A3004C6051 /* WebDavKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 340CF61C2C929DDE004C6051 /* XCRemoteSwiftPackageReference "WebDAVKitSwift" */;
+			productName = WebDavKit;
+		};
+		340DFA7D2C940A8D00585255 /* WebDavKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 340CF61C2C929DDE004C6051 /* XCRemoteSwiftPackageReference "WebDAVKitSwift" */;
 			productName = WebDavKit;

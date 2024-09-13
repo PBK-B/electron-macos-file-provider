@@ -10,7 +10,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev:init": "node-gyp configure",
-    "dev:build": "node-gyp build --debug"
+    "dev:build": "node-gyp build --debug",
+    "dev:plugin": "xcodebuild -scheme EleFileProvider -archivePath ./archive/EFPHelper.xcarchive archive"
   },
   "repository": {
     "type": "git",

@@ -15,8 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/fanjiashu/WebDAVKitSwift",
       "state" : {
-        "revision" : "963e357720c405b24a62a6dd2c4917c84594534a",
-        "version" : "1.2.27"
+        "revision" : "ef6f3bf9352cc43077945ada52711af61015ab96",
+        "version" : "1.3.1"
       }
     }
   ],
