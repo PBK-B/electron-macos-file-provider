@@ -1,9 +1,9 @@
 {
   "name": "electron-macos-file-provider",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Apple FileProvider for macos using the N-API extension electron",
+  "type": "commonjs",
   "main": "index.js",
-  "private": true,
   "directories": {
     "doc": "docs"
   },
