@@ -22,8 +22,8 @@ Napi::Value AddDomain(const Napi::CallbackInfo &info) {
     return env.Null();
   }
 
-  // Napi::String arg0 = info[0].As<Napi::String>(); // identifier
-  // Napi::String arg1 = info[1].As<Napi::String>(); // displayName
+  std::string arg0 = info[0].As<Napi::String>(); // identifier
+  std::string arg1 = info[1].As<Napi::String>(); // displayName
   // Napi::Function callback = info[0].As<Napi::Function>();
 
   if (@available(macOS 11.0, *)) {
@@ -36,13 +36,16 @@ Napi::Value AddDomain(const Napi::CallbackInfo &info) {
       }
     };
 
+    NSString *identifier = [NSString stringWithUTF8String:arg0.c_str()];
+    NSString *displayName = [NSString stringWithUTF8String:arg1.c_str()];
+
     NSFileProviderDomain *domain =
-        [[NSFileProviderDomain alloc] initWithIdentifier:@"cloud.lazycat.client"
-                                             displayName:@"TestFPE"];
+        [[NSFileProviderDomain alloc] initWithIdentifier:identifier
+                                             displayName:displayName];
     [NSFileProviderManager addDomain:domain completionHandler:logValueBlock];
   }
 
-  printf("[FileProvider] call end\n");
+  printf("[FileProvider] call<%s, %s> end\n", arg0.c_str(), arg1.c_str());
   return env.Undefined();
 }
 
