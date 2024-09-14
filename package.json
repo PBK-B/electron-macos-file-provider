@@ -27,7 +27,7 @@
     "n-api"
   ],
   "author": "PBK-B",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/PBK-B/electron-macos-file-provider/issues"
   },
