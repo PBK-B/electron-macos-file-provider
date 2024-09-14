@@ -1,7 +1,7 @@
 /*
  * @Author: Bin
  * @Date: 2024-09-13
- * @FilePath: /lzc-client-desktop/Volumes/tzmaxData/data/users/linakesi/electron-macos-file-provider/index.js
+ * @FilePath: /electron-macos-file-provider/index.js
  */
 
 // import { createRequire } from "node:module"
@@ -19,14 +19,19 @@ try {
     console.warn('[FileProvider]', error);
 }
 
-function removeAllDomains(callback = function () { }) {
+function assertion() {
+    if (process.platform != 'darwin') throw Error(`the current system ${process.platform} is not supported`);
     if (!efphelper || !efphelper.addDomain) throw Error(`efphelper.node init failed`);
-    efphelper.removeAllDomains(callback)
+}
+
+function removeAllDomains(callback = function () { }) {
+    assertion();
+    efphelper.removeAllDomains(callback);
 }
 
 function addDomain(id, name, callback = function () { }) {
-    if (!efphelper || !efphelper.addDomain) throw Error(`efphelper.node init failed`);
-    efphelper.addDomain(id, name, callback)
+    assertion();
+    efphelper.addDomain(id, name, callback);
 }
 
 // export default {
