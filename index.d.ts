@@ -5,6 +5,6 @@
  */
 
 declare module 'electron-macos-file-provider' {
-    function addDomain(identifier: string, displayName: string, callback: (...parameters: any) => void | undefined): void;
-    function removeAllDomains(): void;
+    function addDomain(identifier: string, displayName: string, callback?: (...parameters: any) => void): void;
+    function removeAllDomains(callback?: (...parameters: any) => void): void;
 }

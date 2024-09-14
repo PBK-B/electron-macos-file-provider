@@ -12,54 +12,97 @@ Napi::Value AddDomain(const Napi::CallbackInfo &info) {
   Napi::Env env = info.Env();
 
   if (info.Length() < 2) {
-    Napi::TypeError::New(env, "Wrong number of arguments")
+    Napi::TypeError::New(env, "Wrong of arguments")
         .ThrowAsJavaScriptException();
     return env.Null();
   }
 
-  if (!info[0].IsString() || !info[1].IsString()) {
-    Napi::TypeError::New(env, "Wrong arguments").ThrowAsJavaScriptException();
+  if (!info[0].IsString() || !info[1].IsString() || !info[2].IsFunction()) {
+    Napi::TypeError::New(
+        env, "Wrong identifier, displayName, callback of arguments TypeError")
+        .ThrowAsJavaScriptException();
     return env.Null();
   }
 
-  std::string arg0 = info[0].As<Napi::String>(); // identifier
-  std::string arg1 = info[1].As<Napi::String>(); // displayName
-  // Napi::Function callback = info[0].As<Napi::Function>();
+  Napi::String arg0 = info[0].As<Napi::String>(); // identifier
+  Napi::String arg1 = info[1].As<Napi::String>(); // displayName
+  Napi::Function callback = info[2].As<Napi::Function>();
 
   if (@available(macOS 11.0, *)) {
-    auto logValueBlock = [](NSError *_Nullable error) {
+
+    NSString *identifier =
+        [NSString stringWithUTF8String:arg0.Utf8Value().c_str()];
+    NSString *displayName =
+        [NSString stringWithUTF8String:arg1.Utf8Value().c_str()];
+
+    NSFileProviderDomain *domain =
+        [[NSFileProviderDomain alloc] initWithIdentifier:identifier
+                                             displayName:displayName];
+
+    auto tsfn =
+        Napi::ThreadSafeFunction::New(info.Env(), callback, "callback", 0, 1);
+
+    auto logValueBlock = [tsfn](NSError *_Nullable error) {
       if (!error) {
         printf("[FileProvider] addDomain Ok!\n");
       } else {
         printf("[FileProvider] addDomain failed %s\n",
                [error.debugDescription UTF8String]);
       }
+      tsfn.BlockingCall([error](Napi::Env env, Napi::Function fn) {
+        if (error == nullptr) {
+          fn.Call({env.Undefined()});
+        } else {
+          fn.Call(
+              {Napi::String::New(env, [error.debugDescription UTF8String])});
+        }
+      });
     };
 
-    NSString *identifier = [NSString stringWithUTF8String:arg0.c_str()];
-    NSString *displayName = [NSString stringWithUTF8String:arg1.c_str()];
-
-    NSFileProviderDomain *domain =
-        [[NSFileProviderDomain alloc] initWithIdentifier:identifier
-                                             displayName:displayName];
     [NSFileProviderManager addDomain:domain completionHandler:logValueBlock];
   }
 
-  printf("[FileProvider] call<%s, %s> end\n", arg0.c_str(), arg1.c_str());
+  printf("[FileProvider] call<%s, %s> end\n", arg0.Utf8Value().c_str(),
+         arg1.Utf8Value().c_str());
   return env.Undefined();
 }
 
 Napi::Value RemoveAllDomains(const Napi::CallbackInfo &info) {
   Napi::Env env = info.Env();
 
+  if (info.Length() < 1) {
+    Napi::TypeError::New(env, "Wrong of arguments")
+        .ThrowAsJavaScriptException();
+    return env.Null();
+  }
+
+  if (!info[0].IsFunction()) {
+    Napi::TypeError::New(env, "Wrong callback Function arguments TypeError")
+        .ThrowAsJavaScriptException();
+    return env.Null();
+  }
+
+  Napi::Function callback = info[0].As<Napi::Function>();
+
+  auto tsfn =
+      Napi::ThreadSafeFunction::New(info.Env(), callback, "callback", 0, 1);
+
   if (@available(macOS 11.0, *)) {
-    auto logValueBlock = [](NSError *_Nullable error) {
+    auto logValueBlock = [tsfn](NSError *_Nullable error) {
       if (!error) {
         printf("[FileProvider] removeAllDomains Ok!\n");
       } else {
         printf("[FileProvider] removeAllDomains failed %s\n",
                [error.debugDescription UTF8String]);
       }
+      tsfn.BlockingCall([error](Napi::Env env, Napi::Function fn) {
+        if (error == nullptr) {
+          fn.Call({env.Undefined()});
+        } else {
+          fn.Call(
+              {Napi::String::New(env, [error.debugDescription UTF8String])});
+        }
+      });
     };
 
     [NSFileProviderManager removeAllDomainsWithCompletionHandler:logValueBlock];

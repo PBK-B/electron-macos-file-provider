@@ -1,3 +1,5 @@
+# vscode
+.vscode
 
 # node modules
 node_modules/
@@ -9,3 +11,6 @@ PlugIns
 # node gyp
 build
 bin
+
+# project
+archive
