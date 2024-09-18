@@ -12,11 +12,11 @@
 
 1. installation dependency
 
-```shell
+```bash
 npm install electron-macos-file-provider
 ```
 
-2. copy the `PlugIns/EleFileProvider.appex` you have configured and compiled in your Electron application construction process. Reference [Developer](./#developer) document part configuration and compile EleFileProvider.appex
+2. copy the `PlugIns/EleFileProvider.appex` you have configured and compiled in your Electron application construction process. reference [Developer](#developer) document part configuration and compile EleFileProvider.appex
 
 ## APIs
 
@@ -46,7 +46,9 @@ removeAllDomains((err: any) => {
 
 ## Developer
 
-> Please use `xcode` to open `EFPHelper.xcodeproj` and configure your development team and App Identifier and the correct `app groups identifier`. If you need to modify FileProvider Expand, you can try to run the `EFPHelper` application for debugging.
+> Please use `xcode` to open `EFPHelper.xcodeproj` and configure your development team and App Identifier and the correct `app groups identifier`. 
+> 
+> If you need to modify FileProvider Expand, you can try to run the `EFPHelper` application for debugging.
 
 1. execute `npm install` installation dependency
 
@@ -71,7 +73,7 @@ removeAllDomains((err: any) => {
 ## Contributing
 
 > This project exists thanks to all the people who contribute.
-
+>
 > We welcome contributions of any kind, please see our [contributing guide](https://github.com/electron/electron/blob/main/CONTRIBUTING.md). Found a bug? Please [submit an issue](https://github.com/PBK-B/electron-macos-file-provider/issues/new).
 
 # License
