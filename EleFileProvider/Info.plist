@@ -5,7 +5,7 @@
 	<key>NSExtension</key>
 	<dict>
 		<key>NSExtensionFileProviderDocumentGroup</key>
-		<string>$(TeamIdentifierPrefix)group.cloud.lazycat.clients</string>
+		<string>group.cloud.lazycat.clients</string>
 		<key>NSExtensionFileProviderSupportsEnumeration</key>
 		<true/>
 		<key>NSExtensionPointIdentifier</key>
