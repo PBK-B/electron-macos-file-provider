@@ -1,8 +1,8 @@
 //
 //  FileProviderLogger.swift
-//  EleFileProvider
+//  MyFileProviderExtension
 //
-//  Created by Bin on 2024/9/12.
+//  Created by mac on 2024/8/29.
 //
 
 import FileProvider
@@ -18,7 +18,7 @@ public final class FileProviderLogger {
 
     private init() {
         // 获取共享容器路径
-        guard let containerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "A6954X9WMS.group.com.webdav.fjs") else {
+        guard let containerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "groups.cloud.lazycat.clients") else {
             fatalError("Failed to get container URL")
         }
 

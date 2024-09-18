@@ -1,9 +1,10 @@
 //
 //  FileProviderItem.swift
-//  EleFileProvider
+//  MyFileProviderExtension
 //
-//  Created by Bin on 2024/9/12.
+//  Created by mac on 2024/8/22.
 //
+
 import FileProvider
 import Foundation
 import os.log
@@ -70,13 +71,13 @@ class FileProviderItem: NSObject, NSFileProviderItem {
     }
 
     // 文件类型，基于 WebDAVFile 是否是目录或文件
-//    var contentType: UTType {
-//        // 如果是目录，返回 .folder 类型
-//        // 否则，尝试根据文件扩展名获取 UTType，如果无法确定，返回 .data
-//        let _type = file.isDirectory ? .folder : UTType(filenameExtension: file.extension) ?? .data
-//        FileProviderLogger.logAppInformation("WAD测试\(String(describing: type(of: self)))：contentType名：\(_type)")
-//        return _type
-//    }
+    //    var contentType: UTType {
+    //        // 如果是目录，返回 .folder 类型
+    //        // 否则，尝试根据文件扩展名获取 UTType，如果无法确定，返回 .data
+    //        let _type = file.isDirectory ? .folder : UTType(filenameExtension: file.extension) ?? .data
+    //        FileProviderLogger.logAppInformation("WAD测试\(String(describing: type(of: self)))：contentType名：\(_type)")
+    //        return _type
+    //    }
 
     // 文件类型，基于 WebDAVFile 是否是目录或文件
     var contentType: UTType {
@@ -103,9 +104,9 @@ class FileProviderItem: NSObject, NSFileProviderItem {
         return file.size as NSNumber
     }
 
-//    var childItemCount: NSNumber? {
-//        return 0
-//    }
+    //    var childItemCount: NSNumber? {
+    //        return 0
+    //    }
 
     // 公开的属性，允许外部访问 file 的属性
     var size: Int64 {
@@ -114,5 +115,12 @@ class FileProviderItem: NSObject, NSFileProviderItem {
 
     var isDirectory: Bool {
         return file.isDirectory
+    }
+
+    // 确保文件项可以支持服务
+    func supportsCustomService() -> Bool {
+        FileProviderLogger.logAppInformation("xpc:supportsCustomService = true")
+        // 检查文件项是否支持服务，可以是特定类型文件才支持服务
+        return true
     }
 }

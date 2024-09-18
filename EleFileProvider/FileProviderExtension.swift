@@ -5,21 +5,23 @@ import UniformTypeIdentifiers
 import WebDavKit
 
 let logger = Logger(subsystem: "com.example.myapp", category: "FileProviderExtension")
-
+// 存储参数的键
+private let urlKey = "storedURL"
+private let cookieKey = "storedCookie"
 class FileProviderExtension: NSObject, NSFileProviderReplicatedExtension {
     let domain: NSFileProviderDomain
     var manager: NSFileProviderManager
 
     public var webDAVFileManager: WebDAVFileManager? {
-        if let userDefaults = UserDefaults(suiteName: "A6954X9WMS.group.com.webdav.fjs") {
-            if let fileProviderURL = userDefaults.string(forKey: "FileProviderURL"),
-               let cookie = userDefaults.string(forKey: "FileProviderCookie")
-            {
-                FileProviderLogger.logAppInformation("WAD|链接：\(fileProviderURL) \(cookie)")
-                let webDAV = WebDAV(baseURL: fileProviderURL, port: 443, cookie: cookie)
-                return WebDAVFileManager(webDAV: webDAV)
-            }
+        // HTTP请求传值
+        if let fileProviderURL = UserDefaults.standard.string(forKey: "FileProviderURL"),
+           let cookie = UserDefaults.standard.string(forKey: "FileProviderCookie")
+        {
+            FileProviderLogger.logAppInformation("WAD|链接：\(fileProviderURL) \(cookie)")
+            let webDAV = WebDAV(baseURL: fileProviderURL, port: 443, cookie: cookie)
+            return WebDAVFileManager(webDAV: webDAV)
         }
+
         FileProviderLogger.logAppInformation("WAD|错误：group.com.webdav.fjs group取值失败")
         return nil
     }
@@ -28,13 +30,27 @@ class FileProviderExtension: NSObject, NSFileProviderReplicatedExtension {
         self.domain = domain
         manager = NSFileProviderManager(for: domain)!
         super.init()
+        // 发送请求
+        fetchServerPortInfo()
+
         let webdavProvider = webDAVFileManager
         FileProviderLogger.logAppInformation("WAD测试\(String(describing: type(of: self)))：[FileProviderExtension] Initialized with domain: \(domain.identifier.rawValue)")
         FileProviderLogger.logAppInformation("WAD测试\(String(describing: type(of: self)))：[FileProviderExtension] WebDAVManager: \(String(describing: webdavProvider))")
         FileProviderLogger.logAppInformation("初始化")
+        logger.debug("初始化")
     }
 
     func invalidate() {}
+
+    func startProvidingItem(at url: URL, completionHandler: @escaping ((Error?) -> Void)) {
+        FileProviderLogger.logAppInformation("URL拓展：拓展处理")
+        // 检查 URL 是否符合预期的 URL Scheme
+        if url.scheme == "myfileprovider" {
+            let message = url.queryParameters?["message"] ?? "No message"
+            FileProviderLogger.logAppInformation("URL：Received message from main app: \(message)")
+        }
+        completionHandler(nil)
+    }
 
     func item(for identifier: NSFileProviderItemIdentifier, request _: NSFileProviderRequest, completionHandler: @escaping (NSFileProviderItem?, Error?) -> Void) -> Progress {
         let progress = Progress()
@@ -438,6 +454,19 @@ class FileProviderExtension: NSObject, NSFileProviderReplicatedExtension {
 //            return Data() // 如果序列化失败，返回空数据
 //        }
 //    }
+
+    func supportedServiceSources(for _: NSFileProviderItemIdentifier) -> [NSFileProviderServiceSource] {
+        FileProviderLogger.logAppInformation("xpc:返回自定义服务")
+        // 返回自定义服务
+        let name = NSFileProviderServiceName("com.example.MyXPCService")
+        return [MyCustomFileProviderService(serviceName: name)]
+    }
+
+    func beginRequest(with _: NSFileProviderRequest) {
+        FileProviderLogger.logAppInformation("xpc:Initialize XPC service")
+        let serviceName = NSFileProviderServiceName("com.example.MyXPCService")
+        let fileProviderService = MyCustomFileProviderService(serviceName: serviceName)
+    }
 }
 
 private extension String {
@@ -475,4 +504,90 @@ extension NSFileProviderItemIdentifier {
     static func fromPath(_ path: String) -> NSFileProviderItemIdentifier {
         return NSFileProviderItemIdentifier(path)
     }
+}
+
+extension URL {
+    var queryParameters: [String: String]? {
+        var params = [String: String]()
+        let queryItems = URLComponents(url: self, resolvingAgainstBaseURL: false)?.queryItems
+        queryItems?.forEach { item in
+            params[item.name] = item.value
+        }
+        return params
+    }
+}
+
+// func sendMessageToMainProcess() {
+//    let url = URL(string: "http://127.0.0.1:9999")!
+//    let task = URLSession.shared.dataTask(with: url) { data, response, error in
+//        if let error = error {
+//            FileProviderLogger.logAppInformation("Error: \(error)")
+//        } else if let data = data {
+//            do {
+//                if let jsonResponse = try JSONSerialization.jsonObject(with: data, options: []) as? [String: String] {
+//                    FileProviderLogger.logAppInformation("附属进程接收：\(jsonResponse)")
+//                    let url = jsonResponse["URL"] ?? "Unknown URL"
+//                    let cookie = jsonResponse["Cookie"] ?? "No Cookie"
+//                    storeParameter(url: url, cookie: cookie)
+//                }
+//            } catch {
+//                FileProviderLogger.logAppInformation("Error parsing JSON: \(error)")
+//            }
+//        }
+//    }
+//    task.resume()
+// }
+
+// 动态端口写法
+func fetchServerPortInfo() {
+    let portFileURL = URL(fileURLWithPath: "/tmp/server_port.txt")
+
+    // 读取端口文件
+    do {
+        let portString = try String(contentsOf: portFileURL, encoding: .utf8)
+        let port = portString.replacingOccurrences(of: "Port: ", with: "")
+
+        let serverInfoURL = URL(string: "http://localhost:\(port)/server-info")!
+
+        // 创建请求
+        let request = URLRequest(url: serverInfoURL)
+
+        // 使用 URLSession 发起请求
+        let task = URLSession.shared.dataTask(with: request) { data, _, error in
+            if let error = error {
+                print("Error fetching server info: \(error)")
+                return
+            }
+
+            guard let data = data else {
+                print("No data received")
+                return
+            }
+
+            do {
+                if let jsonObject = try JSONSerialization.jsonObject(with: data, options: []) as? [String: String] {
+                    let url = jsonObject["URL"] ?? "Unknown URL"
+                    let cookie = jsonObject["Cookie"] ?? "No Cookie"
+                    storeParameter(url: url, cookie: cookie)
+                } else {
+                    print("Error parsing JSON")
+                }
+            } catch {
+                print("JSON parsing error: \(error)")
+            }
+        }
+
+        // 启动任务
+        task.resume()
+    } catch {
+        print("Error reading port file: \(error)")
+    }
+}
+
+// 储存参数
+private func storeParameter(url: String, cookie: String) {
+    UserDefaults.standard.set(url, forKey: "FileProviderURL")
+    UserDefaults.standard.set(cookie, forKey: "FileProviderCookie")
+    FileProviderLogger.logAppInformation("Stored URL: \(url)")
+    FileProviderLogger.logAppInformation("Stored Cookie: \(cookie)")
 }
