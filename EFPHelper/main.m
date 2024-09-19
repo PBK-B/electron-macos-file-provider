@@ -18,7 +18,7 @@ void mountWebDAVForFileProvider(void) {
         [NSFileProviderManager removeAllDomainsWithCompletionHandler:^(NSError * _Nullable error) {
             NSFileProviderDomain *domain =
             [[NSFileProviderDomain alloc] initWithIdentifier:@"cloud.lazycat.client"
-                                                 displayName:@"TestFPE"];
+                                                 displayName:@""];
             [NSFileProviderManager addDomain:domain completionHandler:^(NSError * _Nullable error) {
                 printf("err %s \n", [error.debugDescription UTF8String]);
             }];
@@ -33,7 +33,7 @@ void unmountWebDAVForFileProvider(void) {
     os_log(OS_LOG_DEFAULT, "开始取消 FileProvider 挂载");
     NSLog(@"取消挂载操作");
     // 创建域对象
-    NSString *domainIdentifier = @"com.webdav.fjs.MyFileProviderExtension";
+    NSString *domainIdentifier = @"cloud.lazycat.client";
     NSString *domainDisplayName = @"懒猫微服";
     NSFileProviderDomain *domain = [[NSFileProviderDomain alloc] initWithIdentifier:domainIdentifier displayName:domainDisplayName];
     
