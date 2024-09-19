@@ -17,10 +17,18 @@ class FileProviderExtension: NSObject, NSFileProviderReplicatedExtension {
             FileProviderLogger.logAppInformation("开始读取数据")
             if let fileProviderURL = groupUserDefaults.string(forKey: "WebDAV——URL"),
                let cookie = groupUserDefaults.string(forKey: "WebDAV——Cookie") {
-                FileProviderLogger.logAppInformation("读取成功：URL: \(fileProviderURL) Cookie: \(cookie)")
+                FileProviderLogger.logAppInformation("Cookie读取成功：URL: \(fileProviderURL) Cookie: \(cookie)")
                 let webDAV = WebDAV(baseURL: fileProviderURL, port: 443, cookie: cookie)
                 return WebDAVFileManager(webDAV: webDAV)
-            } else {
+            }else if let password = groupUserDefaults.string(forKey: "WebDAV——Userpassword"),
+                     let userName = groupUserDefaults.string(forKey: "WebDAV——Username"),
+                     let fileProviderURL = groupUserDefaults.string(forKey: "WebDAV——URL"){
+                FileProviderLogger.logAppInformation("用户名读取读取成功：URL: \(password) Cookie: \(userName)")
+                let webDAV = WebDAV(baseURL: fileProviderURL, port: 443, username: userName, password: password)
+                return WebDAVFileManager(webDAV: webDAV)
+            }
+            
+            else {
                 FileProviderLogger.logAppInformation("读取失败：URL: \(String(describing: groupUserDefaults.string(forKey: "WebDAV——URL"))) Cookie: \(String(describing: groupUserDefaults.string(forKey: "WebDAV——Cookie"))) \(groupUserDefaults)")
             }
         } else {
