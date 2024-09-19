@@ -79,7 +79,7 @@ Napi::Value AddDomain(const Napi::CallbackInfo &info) {
     } else if (wdUser && wdPassword) {
       [userDefaults setValue:NULL forKey:@"WebDAV——Cookie"];
       [userDefaults setObject:wdUser forKey:@"WebDAV——Username"];
-      [userDefaults setObject:wdUser forKey:@"WebDAV——Userpassword"];
+      [userDefaults setObject:wdPassword forKey:@"WebDAV——Userpassword"];
     } else {
       printf("[FileProvider] Ohhhh! Maybe there is no authentication "
              "information connected to webdav.\n");
