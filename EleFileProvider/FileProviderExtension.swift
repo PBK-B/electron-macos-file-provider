@@ -13,15 +13,15 @@ class FileProviderExtension: NSObject, NSFileProviderReplicatedExtension {
     var manager: NSFileProviderManager
 
     public var webDAVFileManager: WebDAVFileManager? {
-        // HTTP请求传值
-        if let fileProviderURL = UserDefaults.standard.string(forKey: "FileProviderURL"),
-           let cookie = UserDefaults.standard.string(forKey: "FileProviderCookie")
-        {
-            FileProviderLogger.logAppInformation("WAD|链接：\(fileProviderURL) \(cookie)")
-            let webDAV = WebDAV(baseURL: fileProviderURL, port: 443, cookie: cookie)
-            return WebDAVFileManager(webDAV: webDAV)
+        if let groupUserDefaults = UserDefaults(suiteName: "groups.cloud.lazycat.clients"){
+            if let fileProviderURL = groupUserDefaults.string(forKey: "FileProviderURL"),
+               let cookie = groupUserDefaults.string(forKey: "FileProviderCookie")
+            {
+                FileProviderLogger.logAppInformation("WAD|链接：\(fileProviderURL) \(cookie)")
+                let webDAV = WebDAV(baseURL: fileProviderURL, port: 443, cookie: cookie)
+                return WebDAVFileManager(webDAV: webDAV)
+            }
         }
-
         FileProviderLogger.logAppInformation("WAD|错误：group.com.webdav.fjs group取值失败")
         return nil
     }
