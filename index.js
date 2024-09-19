@@ -29,9 +29,31 @@ function removeAllDomains(callback = function () { }) {
     efphelper.removeAllDomains(callback);
 }
 
-function addDomain(id, name, callback = function () { }) {
+function addDomain(id, name, options, callback = function () { }) {
     assertion();
-    efphelper.addDomain(id, name, callback);
+    if (!options?.url) {
+        throw Error("WebDAV url are mandatory items")
+    }
+    if ((!options?.password || !options?.user) && !options?.cookie) {
+        throw Error("authentication method auth user password and cookie are empty")
+    }
+    // 0. domain identifier
+    // 1. domain displayName
+    // 2. WebDAV url
+    // 3. WebDAV user auth name
+    // 4. WebDAV user auth password
+    // 5. WebDAV user cookie
+    // 6. domain add callback function
+
+    efphelper.addDomain(
+        id,
+        name,
+        options.url,
+        options?.user ?? undefined,
+        options?.password ?? null,
+        options?.cookie ?? null,
+        callback
+    );
 }
 
 // export default {

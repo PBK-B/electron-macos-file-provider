@@ -23,7 +23,13 @@ npm install electron-macos-file-provider
 ### NSFileProviderManager addDomain
 
 ```js
-addDomain("cloud.lazycat.client", "", (err: any) => {
+addDomain("cloud.lazycat.client", "", 
+    {
+        url: "http://localhost:8080/webdav/",
+        user: "user001",
+        password: "mypassword",
+    },
+    (err: any) => {
     if(err) {
         console.log("[EleFileProvider] addDomain failed", err);
         return;

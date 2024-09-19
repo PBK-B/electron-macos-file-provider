@@ -5,28 +5,42 @@
  */
 #import "FileProvider/NSFileProviderManager.h"
 #include "napi.h"
+#include <__config>
 #include <string>
 #include <thread>
 
 Napi::Value AddDomain(const Napi::CallbackInfo &info) {
   Napi::Env env = info.Env();
 
-  if (info.Length() < 2) {
+  if (info.Length() < 7) {
     Napi::TypeError::New(env, "Wrong of arguments")
         .ThrowAsJavaScriptException();
     return env.Null();
   }
 
-  if (!info[0].IsString() || !info[1].IsString() || !info[2].IsFunction()) {
+  if (!info[0].IsString() || !info[1].IsString() || !info[6].IsFunction()) {
     Napi::TypeError::New(
         env, "Wrong identifier, displayName, callback of arguments TypeError")
         .ThrowAsJavaScriptException();
     return env.Null();
   }
 
-  Napi::String arg0 = info[0].As<Napi::String>(); // identifier
-  Napi::String arg1 = info[1].As<Napi::String>(); // displayName
-  Napi::Function callback = info[2].As<Napi::Function>();
+  Napi::String arg0 = info[0].As<Napi::String>();         // identifier
+  Napi::String arg1 = info[1].As<Napi::String>();         // displayName
+  Napi::Function callback = info[6].As<Napi::Function>(); // callback fun
+
+  // required parameter judgment
+  if (!info[2].IsString()) {
+    Napi::TypeError::New(env, "Wrong WebDAV url of arguments TypeError")
+        .ThrowAsJavaScriptException();
+    return env.Null();
+  }
+
+  Napi::String urlStr = info[2].As<Napi::String>(); // WebDAV url
+
+  Napi::Value userStr = info[3];     // WebDAV username
+  Napi::Value passwordStr = info[4]; // WebDAV password
+  Napi::Value cookieStr = info[5];   // WebDAV cookie
 
   if (@available(macOS 11.0, *)) {
 
@@ -34,6 +48,43 @@ Napi::Value AddDomain(const Napi::CallbackInfo &info) {
         [NSString stringWithUTF8String:arg0.Utf8Value().c_str()];
     NSString *displayName =
         [NSString stringWithUTF8String:arg1.Utf8Value().c_str()];
+
+    NSString *wdUrl =
+        [NSString stringWithUTF8String:urlStr.Utf8Value().c_str()];
+    NSString *wdUser =
+        passwordStr.IsNull()
+            ? NULL
+            : [NSString
+                  stringWithUTF8String:userStr.ToString().Utf8Value().c_str()];
+    NSString *wdPassword =
+        passwordStr.IsNull()
+            ? NULL
+            : [NSString stringWithUTF8String:passwordStr.ToString()
+                                                 .Utf8Value()
+                                                 .c_str()];
+    NSString *wdCookie =
+        cookieStr.IsNull() ? NULL
+                           : [NSString stringWithUTF8String:cookieStr.ToString()
+                                                                .Utf8Value()
+                                                                .c_str()];
+
+    // Share data from App Group
+    NSUserDefaults *userDefaults = [[NSUserDefaults alloc]
+        initWithSuiteName:@"group.cloud.lazycat.clients"];
+    [userDefaults setObject:wdUrl forKey:@"WebDAV——URL"];
+    if (wdCookie) {
+      [userDefaults setValue:NULL forKey:@"WebDAV——Username"];
+      [userDefaults setValue:NULL forKey:@"WebDAV——Userpassword"];
+      [userDefaults setObject:wdCookie forKey:@"WebDAV——Cookie"];
+    } else if (wdUser && wdPassword) {
+      [userDefaults setValue:NULL forKey:@"WebDAV——Cookie"];
+      [userDefaults setObject:wdUser forKey:@"WebDAV——Username"];
+      [userDefaults setObject:wdUser forKey:@"WebDAV——Userpassword"];
+    } else {
+      printf("[FileProvider] Ohhhh! Maybe there is no authentication "
+             "information connected to webdav.\n");
+    }
+    [userDefaults synchronize];
 
     NSFileProviderDomain *domain =
         [[NSFileProviderDomain alloc] initWithIdentifier:identifier
