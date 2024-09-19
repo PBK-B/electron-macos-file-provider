@@ -5,9 +5,9 @@ import UniformTypeIdentifiers
 import WebDavKit
 
 let logger = Logger(subsystem: "com.example.myapp", category: "FileProviderExtension")
-// 存储参数的键
-private let urlKey = "storedURL"
-private let cookieKey = "storedCookie"
+//// 存储参数的键
+//private let urlKey = "storedURL"
+//private let cookieKey = "storedCookie"
 class FileProviderExtension: NSObject, NSFileProviderReplicatedExtension {
     let domain: NSFileProviderDomain
     var manager: NSFileProviderManager
