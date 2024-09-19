@@ -8,8 +8,7 @@
 #import <Cocoa/Cocoa.h>
 #import "FileProvider/NSFileProviderManager.h"
 #import "OSLog/OSLog.h"
-
-
+#import "EFPHelper-Swift.h"
 //执行挂载
 void mountWebDAVForFileProvider(void) {
     // 在异步队列中执行挂载操作
@@ -46,9 +45,9 @@ void unmountWebDAVForFileProvider(void) {
                 os_log_error(OS_LOG_DEFAULT, "移除 FileProvider 域失败: %@", error.localizedDescription);
                 NSLog(@"移除 FileProvider 域失败: %@", error.localizedDescription);
             } else {
+                NSString *info = [NSString stringWithFormat:@"FileProvider 域成功卸载: %@",domain.identifier];
                 os_log(OS_LOG_DEFAULT, "FileProvider 域成功卸载: %@", domain.identifier);
-                NSLog(@"FileProvider 域成功卸载: %@", domain.identifier);
-                
+                [FileProviderLogger logAppInformation:info];
                 // 在移除完成后，退出应用
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [[NSApplication sharedApplication] terminate:nil];
@@ -84,12 +83,19 @@ int main(int argc, const char * argv[]) {
     if ([action isEqualToString:@"mount"]) {
         if (url && cookie) {
             // 从 App Group 共享数据
-            NSUserDefaults *userDefaults = [[NSUserDefaults alloc] initWithSuiteName:@"groups.cloud.lazycat.clients"];
-            [userDefaults setObject:url forKey:@"FileProviderURL"];
-            [userDefaults setObject:cookie forKey:@"FileProviderCookie"];
+            NSUserDefaults *userDefaults = [[NSUserDefaults alloc] initWithSuiteName:@"group.cloud.lazycat.clients"];
+            [userDefaults setObject:url forKey:@"WebDAV——URL"];
+            [userDefaults setObject:cookie forKey:@"WebDAV——Cookie"];
             [userDefaults synchronize];
-            NSLog(@"CommandLine 接收到传值 URL: %@, Cookie: %@", url, cookie);
-            mountWebDAVForFileProvider();
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                
+                NSUserDefaults *temp_userDefaults = [[NSUserDefaults alloc]initWithSuiteName:@"group.cloud.lazycat.clients"];
+                NSString *info = [NSString stringWithFormat:@"CommandLine 接收到传值 URL: %@, Cookie: %@",[temp_userDefaults stringForKey:@"WebDAV——Cookie"],[temp_userDefaults stringForKey:@"WebDAV——URL"]];
+                [FileProviderLogger logAppInformation:info];
+                
+                //执行File挂载操作
+                mountWebDAVForFileProvider();
+            });
         } else {
             NSLog(@"缺少 URL 或 Cookie 参数");
         }
@@ -101,10 +107,8 @@ int main(int argc, const char * argv[]) {
     } else {
         NSLog(@"没有传值，未知操作: %@", action);
     }
-    
-    
     [[NSApplication sharedApplication] run];
-    return 1;
+    return 0;
 }
 
 

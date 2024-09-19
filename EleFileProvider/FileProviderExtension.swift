@@ -13,16 +13,34 @@ class FileProviderExtension: NSObject, NSFileProviderReplicatedExtension {
     var manager: NSFileProviderManager
 
     public var webDAVFileManager: WebDAVFileManager? {
-        if let groupUserDefaults = UserDefaults(suiteName: "groups.cloud.lazycat.clients"){
-            if let fileProviderURL = groupUserDefaults.string(forKey: "FileProviderURL"),
-               let cookie = groupUserDefaults.string(forKey: "FileProviderCookie")
-            {
-                FileProviderLogger.logAppInformation("WAD|链接：\(fileProviderURL) \(cookie)")
+        if let groupUserDefaults = UserDefaults(suiteName: "group.cloud.lazycat.clients") {
+            FileProviderLogger.logAppInformation("开始读取数据")
+            if let fileProviderURL = groupUserDefaults.string(forKey: "WebDAV——URL"),
+               let cookie = groupUserDefaults.string(forKey: "WebDAV——Cookie") {
+                FileProviderLogger.logAppInformation("读取成功：URL: \(fileProviderURL) Cookie: \(cookie)")
                 let webDAV = WebDAV(baseURL: fileProviderURL, port: 443, cookie: cookie)
                 return WebDAVFileManager(webDAV: webDAV)
+            } else {
+                FileProviderLogger.logAppInformation("读取失败：URL: \(String(describing: groupUserDefaults.string(forKey: "WebDAV——URL"))) Cookie: \(String(describing: groupUserDefaults.string(forKey: "WebDAV——Cookie"))) \(groupUserDefaults)")
             }
+        } else {
+            FileProviderLogger.logAppInformation("无法初始化 UserDefaults")
         }
-        FileProviderLogger.logAppInformation("WAD|错误：group.com.webdav.fjs group取值失败")
+        FileProviderLogger.logAppInformation("WAD|错误：group取值失败")
+        
+        //测试
+        
+        let testDefaults = UserDefaults(suiteName: "groups.cloud.lazycat.clients")
+        testDefaults?.set("https://test.url", forKey: "TestURL")
+        testDefaults?.set("test-cookie", forKey: "TestCookie")
+        testDefaults?.synchronize()
+        if let testURL = testDefaults?.string(forKey: "TestURL"),
+           let testCookie = testDefaults?.string(forKey: "TestCookie") {
+            FileProviderLogger.logAppInformation("WAD|测试读取成功：\(testURL) \(testCookie)")
+        } else {
+            FileProviderLogger.logAppInformation("WAD|测试读取失败")
+        }
+        
         return nil
     }
 

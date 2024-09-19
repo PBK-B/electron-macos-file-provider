@@ -9,16 +9,19 @@ import FileProvider
 import Foundation
 import os.log
 
-public final class FileProviderLogger {
+@objcMembers
+public final class FileProviderLogger: NSObject {
     // MARK: - 日志服务本身
 
     public static let shared = FileProviderLogger()
-    private let logFilePath: String
+    private var logFilePath: String = ""
     private let logQueue = DispatchQueue(label: "com.appinformation.logQueue", attributes: .concurrent)
 
-    private init() {
+    private override init() {
+        super.init()
         // 获取共享容器路径
         guard let containerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "groups.cloud.lazycat.clients") else {
+            print("Failed to get container URL")
             fatalError("Failed to get container URL")
         }
 
@@ -29,15 +32,27 @@ public final class FileProviderLogger {
         do {
             try FileManager.default.createDirectory(at: logDirectory, withIntermediateDirectories: true, attributes: nil)
         } catch {
-            fatalError("Failed to create log directory: \(error)")
+            print("Failed to create log directory: \(error)")
+           fatalError("Failed to create log directory: \(error)")
         }
 
         // 设置日志文件路径
         let logFileURL = logDirectory.appendingPathComponent("fileProvider.log")
         logFilePath = logFileURL.path
-
+        //读取一下权限
+        let permissions = try? FileManager.default.attributesOfItem(atPath: logDirectory.path)
+        print("Log directory permissions: \(String(describing: permissions))")
         // 现在所有存储属性都已经初始化完成
         print("Log file path: \(logFilePath)")
+        
+        let testFileURL = logDirectory.appendingPathComponent("testfile.txt")
+        do {
+            try "Test content".write(to: testFileURL, atomically: true, encoding: .utf8)
+            print("Successfully wrote to test file.")
+        } catch {
+            print("Failed to write to test file: \(error)")
+        }
+        
 
         // 准备日志文件
         prepareLogFile()

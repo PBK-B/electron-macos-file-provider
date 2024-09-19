@@ -50,6 +50,20 @@
             ReferencedContainer = "container:EFPHelper.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <CommandLineArguments>
+         <CommandLineArgument
+            argument = "--action=mount"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "--url=&quot;https://file.workspace.heiyu.space/_lzc/files/home&quot;"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "--cookie=&quot;HC-Auth-Token=98a07f2a-01c3-4b21-8f4f-566093e00fa1&quot;"
+            isEnabled = "YES">
+         </CommandLineArgument>
+      </CommandLineArguments>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"

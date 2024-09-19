@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		04D7EA912C9BFC7700E4B861 /* FileProviderLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 340CF6212C929F89004C6051 /* FileProviderLogger.swift */; };
 		340CF5E02C92918C004C6051 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 340CF5DF2C92918C004C6051 /* Assets.xcassets */; };
 		340CF5E52C92918C004C6051 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 340CF5E42C92918C004C6051 /* main.m */; };
 		340CF60C2C929631004C6051 /* UniformTypeIdentifiers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340CF5F22C92919E004C6051 /* UniformTypeIdentifiers.framework */; };
@@ -18,7 +19,6 @@
 		340CF6422C9314A3004C6051 /* WebDavKit in Frameworks */ = {isa = PBXBuildFile; productRef = 340CF6412C9314A3004C6051 /* WebDavKit */; };
 		340CF6592C931934004C6051 /* EleFileProvider.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 340CF60B2C929631004C6051 /* EleFileProvider.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		340DFA7E2C940A8D00585255 /* WebDavKit in Frameworks */ = {isa = PBXBuildFile; productRef = 340DFA7D2C940A8D00585255 /* WebDavKit */; };
-		34730D092C9A795700445417 /* ServiceDiscovery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34730D082C9A795700445417 /* ServiceDiscovery.swift */; };
 		34730D0B2C9A797E00445417 /* MyCustomFileProviderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34730D0A2C9A797E00445417 /* MyCustomFileProviderService.swift */; };
 		34730D0D2C9A799C00445417 /* MyCustomXPCProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34730D0C2C9A799C00445417 /* MyCustomXPCProtocol.swift */; };
 /* End PBXBuildFile section */
@@ -48,6 +48,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		04D7EA942C9BFE7100E4B861 /* EFPHelper-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "EFPHelper-Bridging-Header.h"; sourceTree = "<group>"; };
+		04EDA46A2C9BB3FC0006B890 /* EleFileProviderDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = EleFileProviderDebug.entitlements; sourceTree = "<group>"; };
+		04EDA46C2C9BD37F0006B890 /* EFPHelperDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = EFPHelperDebug.entitlements; sourceTree = "<group>"; };
 		340CF5D62C92918A004C6051 /* EFPHelper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EFPHelper.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		340CF5DF2C92918C004C6051 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		340CF5E42C92918C004C6051 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -62,7 +65,6 @@
 		340CF61F2C929F47004C6051 /* WebDAVFileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebDAVFileManager.swift; sourceTree = "<group>"; };
 		340CF6212C929F89004C6051 /* FileProviderLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileProviderLogger.swift; sourceTree = "<group>"; };
 		340CF6582C9317E6004C6051 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		34730D082C9A795700445417 /* ServiceDiscovery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceDiscovery.swift; sourceTree = "<group>"; };
 		34730D0A2C9A797E00445417 /* MyCustomFileProviderService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCustomFileProviderService.swift; sourceTree = "<group>"; };
 		34730D0C2C9A799C00445417 /* MyCustomXPCProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCustomXPCProtocol.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -111,9 +113,11 @@
 			isa = PBXGroup;
 			children = (
 				340CF6582C9317E6004C6051 /* Info.plist */,
+				04EDA46C2C9BD37F0006B890 /* EFPHelperDebug.entitlements */,
 				340CF5DF2C92918C004C6051 /* Assets.xcassets */,
 				340CF5E42C92918C004C6051 /* main.m */,
 				340CF5E62C92918C004C6051 /* EFPHelper.entitlements */,
+				04D7EA942C9BFE7100E4B861 /* EFPHelper-Bridging-Header.h */,
 			);
 			path = EFPHelper;
 			sourceTree = "<group>";
@@ -129,15 +133,15 @@
 		340CF60D2C929631004C6051 /* EleFileProvider */ = {
 			isa = PBXGroup;
 			children = (
-				34730D072C9A793900445417 /* XPC */,
+				04EDA46A2C9BB3FC0006B890 /* EleFileProviderDebug.entitlements */,
 				340CF60E2C929631004C6051 /* FileProviderExtension.swift */,
 				340CF6102C929631004C6051 /* FileProviderItem.swift */,
 				340CF6122C929631004C6051 /* FileProviderEnumerator.swift */,
 				340CF61F2C929F47004C6051 /* WebDAVFileManager.swift */,
 				340CF6212C929F89004C6051 /* FileProviderLogger.swift */,
-				34730D082C9A795700445417 /* ServiceDiscovery.swift */,
 				340CF6142C929631004C6051 /* Info.plist */,
 				340CF6152C929631004C6051 /* EleFileProvider.entitlements */,
+				34730D072C9A793900445417 /* XPC */,
 			);
 			path = EleFileProvider;
 			sourceTree = "<group>";
@@ -259,6 +263,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				04D7EA912C9BFC7700E4B861 /* FileProviderLogger.swift in Sources */,
 				340CF5E52C92918C004C6051 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -270,7 +275,6 @@
 				340CF60F2C929631004C6051 /* FileProviderExtension.swift in Sources */,
 				340CF6112C929631004C6051 /* FileProviderItem.swift in Sources */,
 				34730D0D2C9A799C00445417 /* MyCustomXPCProtocol.swift in Sources */,
-				34730D092C9A795700445417 /* ServiceDiscovery.swift in Sources */,
 				34730D0B2C9A797E00445417 /* MyCustomFileProviderService.swift in Sources */,
 				340CF6202C929F47004C6051 /* WebDAVFileManager.swift in Sources */,
 				340CF6132C929631004C6051 /* FileProviderEnumerator.swift in Sources */,
@@ -409,14 +413,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = EFPHelper/EFPHelper.entitlements;
+				CODE_SIGN_ENTITLEMENTS = EFPHelper/EFPHelperDebug.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "3rd Party Mac Developer Application";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=macosx*]" = A6954X9WMS;
+				DEVELOPMENT_TEAM = A6954X9WMS;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = EFPHelper/Info.plist;
@@ -431,8 +433,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = cloud.lazycat.client;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "MacOS App";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -465,19 +467,19 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "MacOS App";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
 		340CF61A2C929631004C6051 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = EleFileProvider/EleFileProvider.entitlements;
+				CODE_SIGN_ENTITLEMENTS = EleFileProvider/EleFileProviderDebug.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "3rd Party Mac Developer Application";
-				CODE_SIGN_STYLE = Manual;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=macosx*]" = A6954X9WMS;
+				DEVELOPMENT_TEAM = A6954X9WMS;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = EleFileProvider/Info.plist;
@@ -492,7 +494,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = cloud.lazycat.client.hclientFileProvider;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "MacOS App Extension";
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

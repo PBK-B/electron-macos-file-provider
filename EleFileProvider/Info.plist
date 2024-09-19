@@ -13,5 +13,7 @@
 		<key>NSExtensionPrincipalClass</key>
 		<string>$(PRODUCT_MODULE_NAME).FileProviderExtension</string>
 	</dict>
+	<key>com.apple.security.app-sandbox</key>
+	<true/>
 </dict>
 </plist>
