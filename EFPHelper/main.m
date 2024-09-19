@@ -14,14 +14,13 @@ void mountWebDAVForFileProvider(void) {
     // 在异步队列中执行挂载操作
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSLog(@"执行挂载操作");
-        [NSFileProviderManager removeAllDomainsWithCompletionHandler:^(NSError * _Nullable error) {
-            NSFileProviderDomain *domain =
-            [[NSFileProviderDomain alloc] initWithIdentifier:@"cloud.lazycat.client"
-                                                 displayName:@""];
+        NSString *domainIdentifier = @"cloud.lazycat.client";
+        NSString *domainDisplayName = @"懒猫微服";
+        NSFileProviderDomain *domain = [[NSFileProviderDomain alloc] initWithIdentifier:domainIdentifier displayName:domainDisplayName];
+        [NSFileProviderManager  removeDomain:domain completionHandler:^(NSError * _Nullable error) {
             [NSFileProviderManager addDomain:domain completionHandler:^(NSError * _Nullable error) {
-                printf("err %s \n", [error.debugDescription UTF8String]);
-            }];
-            
+                          printf("err %s \n", [error.debugDescription UTF8String]);
+                      }];
         }];
     });
 }

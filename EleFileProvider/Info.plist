@@ -1,19 +1,52 @@
+<!--<?xml version="1.0" encoding="UTF-8"?>-->
+<!--<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">-->
+<!--<plist version="1.0">-->
+<!--<dict>-->
+<!--	<key>NSExtension</key>-->
+<!--	<dict>-->
+<!--		<key>NSExtensionFileProviderDocumentGroup</key>-->
+<!--		<string>group.cloud.lazycat.clients</string>-->
+<!--		<key>NSExtensionFileProviderSupportsEnumeration</key>-->
+<!--		<true/>-->
+<!--		<key>NSExtensionPointIdentifier</key>-->
+<!--		<string>com.apple.fileprovider-nonui</string>-->
+<!--		<key>NSExtensionPrincipalClass</key>-->
+<!--		<string>$(PRODUCT_MODULE_NAME).FileProviderExtension</string>-->
+<!--	</dict>-->
+<!--	<key>com.apple.security.app-sandbox</key>-->
+<!--	<true/>-->
+<!--</dict>-->
+<!--</plist>-->
+
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSExtension</key>
-	<dict>
-		<key>NSExtensionFileProviderDocumentGroup</key>
-		<string>group.cloud.lazycat.clients</string>
-		<key>NSExtensionFileProviderSupportsEnumeration</key>
-		<true/>
-		<key>NSExtensionPointIdentifier</key>
-		<string>com.apple.fileprovider-nonui</string>
-		<key>NSExtensionPrincipalClass</key>
-		<string>$(PRODUCT_MODULE_NAME).FileProviderExtension</string>
-	</dict>
-	<key>com.apple.security.app-sandbox</key>
-	<true/>
+    <key>NSExtension</key>
+    <dict>
+        <key>NSExtensionFileProviderDocumentGroup</key>
+        <string>group.cloud.lazycat.clients</string>
+        <key>NSExtensionFileProviderSupportsEnumeration</key>
+        <true/>
+        <key>NSExtensionPointIdentifier</key>
+        <string>com.apple.fileprovider-nonui</string>
+        <key>NSExtensionPrincipalClass</key>
+        <string>$(PRODUCT_MODULE_NAME).FileProviderExtension</string>
+    </dict>
+
+    <key>NSFileProviderDomains</key>
+    <array>
+        <dict>
+            <key>FPDDomainIdentifier</key>
+            <string>cloud.lazycat.client.hclientFileProvider</string>
+            <key>FPDDomainDisplayName</key>
+            <string>Lazycat Client Files</string>
+            <key>FPDDomainSyncEnabled</key>
+            <true/>
+        </dict>
+    </array>
+
+    <key>com.apple.security.app-sandbox</key>
+    <true/>
 </dict>
 </plist>
