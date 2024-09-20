@@ -68,16 +68,31 @@ Napi::Value AddDomain(const Napi::CallbackInfo &info) {
                                                                 .Utf8Value()
                                                                 .c_str()];
 
+    NSString *appGroupId = @"group.cloud.lazycat.clients";
+    NSURL *appGroupURL = [[NSFileManager defaultManager]
+        containerURLForSecurityApplicationGroupIdentifier:appGroupId];
+    auto logFilePath = [[appGroupURL absoluteString] UTF8String];
+
     // Share data from App Group
-    NSUserDefaults *userDefaults = [[NSUserDefaults alloc]
-        initWithSuiteName:@"group.cloud.lazycat.clients"];
+
+    NSUserDefaults *userDefaults =
+        [[NSUserDefaults alloc] initWithSuiteName:appGroupId];
+    [userDefaults removeObjectForKey:@"WebDAV——Username"];
+    [userDefaults removeObjectForKey:@"WebDAV——Userpassword"];
+    [userDefaults removeObjectForKey:@"WebDAV——Cookie"];
+    [userDefaults removeObjectForKey:@"WebDAV——URL"];
+
     [userDefaults setObject:wdUrl forKey:@"WebDAV——URL"];
+
+    printf("[FileProvider] logs path:%s url:%s \n", logFilePath,
+           [[userDefaults stringForKey:@"WebDAV——URL"] UTF8String]);
+
     if (wdCookie) {
-      [userDefaults setValue:NULL forKey:@"WebDAV——Username"];
-      [userDefaults setValue:NULL forKey:@"WebDAV——Userpassword"];
+      // [userDefaults setObject:NULL forKey:@"WebDAV——Username"];
+      // [userDefaults setObject:NULL forKey:@"WebDAV——Userpassword"];
       [userDefaults setObject:wdCookie forKey:@"WebDAV——Cookie"];
     } else if (wdUser && wdPassword) {
-      [userDefaults setValue:NULL forKey:@"WebDAV——Cookie"];
+      // [userDefaults setObject:NULL forKey:@"WebDAV——Cookie"];
       [userDefaults setObject:wdUser forKey:@"WebDAV——Username"];
       [userDefaults setObject:wdPassword forKey:@"WebDAV——Userpassword"];
     } else {
