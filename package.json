@@ -1,42 +1,53 @@
 {
-  "name": "electron-macos-file-provider",
-  "version": "1.0.1",
-  "description": "Apple FileProvider for macos using the N-API extension electron",
-  "type": "commonjs",
-  "main": "index.js",
-  "directories": {
-    "doc": "docs"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev:init": "node-gyp configure",
-    "dev:build": "node-gyp build --debug",
-    "dev:plugin": "xcodebuild -scheme EleFileProvider -archivePath ./archive/EFPHelper.xcarchive archive"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/PBK-B/electron-macos-file-provider.git"
-  },
-  "keywords": [
-    "electron",
-    "file-provider",
-    "extension",
-    "apple",
-    "macos",
-    "osx",
-    "n-api"
-  ],
-  "author": "PBK-B",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/PBK-B/electron-macos-file-provider/issues"
-  },
-  "homepage": "https://github.com/PBK-B/electron-macos-file-provider#readme",
-  "dependencies": {
-    "bindings": "^1.5.0",
-    "node-addon-api": "*"
-  },
-  "devDependencies": {
-    "node-gyp": "^10.2.0"
-  }
+    "name": "electron-macos-file-provider",
+    "version": "1.0.4",
+    "description": "Apple FileProvider for macos using the N-API extension electron",
+    "type": "commonjs",
+    "main": "index.js",
+    "directories": {
+        "doc": "docs"
+    },
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "install": "echo \"Ignore: not executed node-gyp rebuild\"",
+        "dev:init": "node-gyp configure",
+        "dev:build": "node-gyp build --debug",
+        "dev:plugin": "xcodebuild -scheme EleFileProvider -archivePath ./archive/EFPHelper.xcarchive archive"
+    },
+    "files": [
+        "README.md",
+        "LICENSE",
+        "package.json",
+        "binding.gyp",
+        "./index.js",
+        "./index.d.ts",
+        "./archive/EFPHelper.xcarchive/Products/Applications/EFPHelper.app/Contents/PlugIns/EleFileProvider.appex",
+        "./build"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/PBK-B/electron-macos-file-provider.git"
+    },
+    "keywords": [
+        "electron",
+        "file-provider",
+        "extension",
+        "apple",
+        "macos",
+        "osx",
+        "n-api"
+    ],
+    "author": "PBK-B",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/PBK-B/electron-macos-file-provider/issues"
+    },
+    "homepage": "https://github.com/PBK-B/electron-macos-file-provider#readme",
+    "dependencies": {
+        "bindings": "^1.5.0",
+        "node-addon-api": "*"
+    },
+    "devDependencies": {
+        "node-gyp": "^10.2.0"
+    }
 }
