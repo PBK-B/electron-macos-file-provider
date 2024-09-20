@@ -16,7 +16,14 @@ public final class FileProviderLogger: NSObject {
     private override init() {
         super.init()
         // 获取共享容器路径
-        guard let containerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.cloud.lazycat.clients") else {
+        var appGroupID = "group.cloud.lazycat.clients"
+        if let appGroups = Bundle.main.object(forInfoDictionaryKey: "com.apple.security.application-groups") as? [String] {
+            if let ID = appGroups.first {
+                print("App Groups ID: \(ID)")
+                appGroupID = ID
+            }
+        }
+        guard let containerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroupID) else {
             print("Failed to get container URL")
             fatalError("获取共享容器路径失败")
         }

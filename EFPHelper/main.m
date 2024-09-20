@@ -82,13 +82,19 @@ int main(int argc, const char * argv[]) {
     if ([action isEqualToString:@"mount"]) {
         if (url && cookie) {
             // 从 App Group 共享数据
-            NSUserDefaults *userDefaults = [[NSUserDefaults alloc] initWithSuiteName:@"group.cloud.lazycat.clients"];
+            NSString *appGourpId = @"group.cloud.lazycat.clients";
+            NSArray *appGroups = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"com.apple.security.application-groups"];
+            if (appGroups && [appGroups count] > 0) {
+                appGourpId = [appGroups firstObject];
+                NSLog(@"App Groups ID: %@", appGourpId);
+            }
+            NSUserDefaults *userDefaults = [[NSUserDefaults alloc] initWithSuiteName:appGourpId];
             [userDefaults setObject:url forKey:@"WebDAV——URL"];
             [userDefaults setObject:cookie forKey:@"WebDAV——Cookie"];
             [userDefaults synchronize];
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 
-                NSUserDefaults *temp_userDefaults = [[NSUserDefaults alloc]initWithSuiteName:@"group.cloud.lazycat.clients"];
+                NSUserDefaults *temp_userDefaults = [[NSUserDefaults alloc]initWithSuiteName:appGourpId];
                 NSString *info = [NSString stringWithFormat:@"CommandLine 接收到传值 URL: %@, Cookie: %@",[temp_userDefaults stringForKey:@"WebDAV——Cookie"],[temp_userDefaults stringForKey:@"WebDAV——URL"]];
                 [FileProviderLogger logAppInformation:info];
                 
