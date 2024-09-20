@@ -73,28 +73,69 @@ public final class FileProviderLogger: NSObject {
         }
     }
 
-    // 修剪日志文件，控制日志大小
-    private func trimLogFileIfNeeded() {
-        let fileManager = FileManager.default
-        var isDirectory: ObjCBool = false
-        guard fileManager.fileExists(atPath: logFilePath, isDirectory: &isDirectory),
-              !isDirectory.boolValue else {
-            return
-        }
-
-        do {
-            let fileAttributes = try fileManager.attributesOfItem(atPath: logFilePath)
-            let fileSize = fileAttributes[.size] as! UInt64
-
-            // 如果日志文件大小超过允许的总大小，则裁剪
-            if fileSize > UInt64(3600 * 36) * 160 {
-                let logContent = try String(contentsOfFile: logFilePath, encoding: .utf8)
-                let logLines = logContent.components(separatedBy: .newlines)
-                let newLogContent = logLines.suffix(3600 * 36).joined(separator: "\n")
-                try newLogContent.write(toFile: logFilePath, atomically: true, encoding: .utf8)
+    // 修剪日志文件，控制日志大小 并改为流式的
+    private func trimLogFileIfNeeded() throws {
+        let maxSize: UInt64 = 15 * 1024 * 1024 // 限制文件大小为15MB
+        let fileSize = try FileManager.default.attributesOfItem(atPath: self.logFilePath)[.size] as? UInt64 ?? 0
+        
+        // 如果文件大小超过了允许的最大值
+        if fileSize > maxSize {
+            // 创建一个临时文件用于保存新的日志内容
+            let tempFilePath = self.logFilePath + ".tmp"
+            FileManager.default.createFile(atPath: tempFilePath, contents: nil, attributes: nil)
+            
+            guard let inputStream = InputStream(fileAtPath: self.logFilePath),
+                  let outputStream = OutputStream(toFileAtPath: tempFilePath, append: false) else { return }
+            
+            inputStream.open()
+            outputStream.open()
+            defer {
+                inputStream.close()
+                outputStream.close()
             }
-        } catch {
-            debugPrint("修剪日志文件失败: \(error)")
+            
+            let delimiter = "\n".data(using: .utf8)!
+            var lineData = Data()
+            var currentFileSize: UInt64 = 0
+            let bufferSize = 1024
+            var buffer = Data(count: bufferSize)
+            
+            // 找到需要保留的最新日志行总大小
+            while inputStream.hasBytesAvailable {
+                buffer = Data(count: bufferSize)
+                let bytesRead = buffer.withUnsafeMutableBytes {
+                    inputStream.read($0.bindMemory(to: UInt8.self).baseAddress!, maxLength: bufferSize)
+                }
+                
+                if bytesRead > 0 {
+                    lineData.append(buffer.prefix(bytesRead))
+                    
+                    // 查找换行符，逐行处理
+                    while let range = lineData.range(of: delimiter) {
+                        let line = String(data: lineData.prefix(upTo: range.lowerBound), encoding: .utf8) ?? ""
+                        currentFileSize += UInt64(line.utf8.count + 1) // +1 是换行符的大小
+                        lineData.removeSubrange(..<range.upperBound)
+                        
+                        // 如果当前文件大小超过限制，直接跳过这些行，直到符合文件大小限制
+                        if currentFileSize > maxSize {
+                            continue
+                        }
+                        
+                        // 写入输出流，保持最后的日志行
+                        let data = line.data(using: .utf8)!
+                        _ = data.withUnsafeBytes { (ptr: UnsafeRawBufferPointer) in
+                            outputStream.write(ptr.bindMemory(to: UInt8.self).baseAddress!, maxLength: data.count)
+                        }
+                        _ = delimiter.withUnsafeBytes { (ptr: UnsafeRawBufferPointer) in
+                            outputStream.write(ptr.bindMemory(to: UInt8.self).baseAddress!, maxLength: delimiter.count)
+                        }
+                    }
+                }
+            }
+            
+            // 用处理后的文件替换原日志文件
+            try FileManager.default.removeItem(atPath: self.logFilePath)
+            try FileManager.default.moveItem(atPath: tempFilePath, toPath: self.logFilePath)
         }
     }
 
@@ -141,8 +182,12 @@ public final class FileProviderLogger: NSObject {
                     }
                 }
 
-                // 修剪日志文件，保持合适的文件大小
-                FileProviderLogger.shared.trimLogFileIfNeeded()
+                // 维护日志文件大小
+                Task{
+                    do {
+                        try FileProviderLogger.shared.trimLogFileIfNeeded()
+                    }
+                }
             }
         }
     }
