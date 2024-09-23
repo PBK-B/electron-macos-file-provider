@@ -5,6 +5,8 @@
  */
 #import "FileProvider/NSFileProviderManager.h"
 #include "napi.h"
+#include <FileProvider/FileProvider.h>
+#include <Foundation/Foundation.h>
 #include <__config>
 #include <string>
 #include <thread>
@@ -14,7 +16,7 @@ Napi::Value AddDomain(const Napi::CallbackInfo &info) {
 
   if (info.Length() < 7) {
     Napi::TypeError::New(env, "Wrong of arguments")
-        .ThrowAsJavaScriptException();                                                                                                                                                                                                                           
+        .ThrowAsJavaScriptException();
     return env.Null();
   }
 
@@ -177,29 +179,90 @@ Napi::Value RemoveAllDomains(const Napi::CallbackInfo &info) {
   return env.Undefined();
 }
 
+/// 获取挂载实际路径
+void GetUserVisiblePath(const Napi::CallbackInfo &info) {
+  Napi::Env env = info.Env();
+  if (info.Length() < 3) {
+    Napi::TypeError::New(env, "Wrong of arguments")
+        .ThrowAsJavaScriptException();
+    return;
+  }
 
-///获取FileProvider进程的日志路径
-Napi::Value GetFileProviderLogPath(const Napi::CallbackInfo& info) {
-    Napi::Env env = info.Env();
-    
-    NSUserDefaults *userDefaults = [[NSUserDefaults alloc] initWithSuiteName:@"group.cloud.lazycat.clients"];
-    NSString *path = [userDefaults stringForKey:@"FileProviderLogPath"];
+  if (!info[0].IsString() || !info[1].IsString() || !info[2].IsFunction()) {
+    Napi::TypeError::New(
+        env, "Wrong identifier, displayName, callback of arguments TypeError")
+        .ThrowAsJavaScriptException();
+    return;
+  }
 
-    // 处理空值
-    if (!path) {
-        return Napi::String::New(env, ""); // 返回空字符串
-    }
+  Napi::String identifierValue = info[0].As<Napi::String>();
+  Napi::String displayNameValue = info[1].As<Napi::String>();
+  Napi::Function callback = info[2].As<Napi::Function>();
 
-    // 将 NSString 转换为 std::string
-    std::string result([path UTF8String]);
+  if (@available(macOS 11.0, *)) {
+    auto tsfn =
+        Napi::ThreadSafeFunction::New(info.Env(), callback, "callback", 0, 1);
 
-    // 将结果返回为 Napi::String
-    return Napi::String::New(env, result);
+    NSString *identifier =
+        [NSString stringWithUTF8String:identifierValue.Utf8Value().c_str()];
+    NSString *displayName =
+        [NSString stringWithUTF8String:displayNameValue.Utf8Value().c_str()];
+
+    NSFileProviderDomain *domain =
+        [[NSFileProviderDomain alloc] initWithIdentifier:identifier
+                                             displayName:displayName];
+
+    auto callbackValueBlock = [tsfn](NSURL *userVisibleFile,
+                                     NSError *_Nullable error) {
+      if (!error) {
+        printf("[FileProvider] getUserVisibleURLForItemIdentifier Ok! url:%s\n",
+               [[userVisibleFile absoluteString] UTF8String]);
+      } else {
+        printf("[FileProvider] getUserVisibleURLForItemIdentifier failed %s\n",
+               [error.debugDescription UTF8String]);
+      }
+      tsfn.BlockingCall([userVisibleFile, error](Napi::Env env,
+                                                 Napi::Function fn) {
+        if (error == nullptr) {
+          fn.Call({Napi::String::New(env, [[userVisibleFile path] UTF8String]),
+                   env.Undefined()});
+        } else {
+          fn.Call(
+              {env.Undefined(),
+               Napi::String::New(env, [error.debugDescription UTF8String])});
+        }
+      });
+    };
+
+    [[NSFileProviderManager managerForDomain:domain]
+        getUserVisibleURLForItemIdentifier:
+            NSFileProviderRootContainerItemIdentifier
+                         completionHandler:callbackValueBlock];
+  } else {
+    callback.Call({env.Undefined(),
+                   Napi::String::New(env, "only macOS 11.0 is supported")});
+  }
 }
 
+/// 获取FileProvider进程的日志路径
+Napi::Value GetFileProviderLogPath(const Napi::CallbackInfo &info) {
+  Napi::Env env = info.Env();
 
+  NSUserDefaults *userDefaults =
+      [[NSUserDefaults alloc] initWithSuiteName:@"group.cloud.lazycat.clients"];
+  NSString *path = [userDefaults stringForKey:@"FileProviderLogPath"];
 
+  // 处理空值
+  if (!path) {
+    return Napi::String::New(env, ""); // 返回空字符串
+  }
 
+  // 将 NSString 转换为 std::string
+  std::string result([path UTF8String]);
+
+  // 将结果返回为 Napi::String
+  return Napi::String::New(env, result);
+}
 
 /**
  * This code is our entry-point. We receive two arguments here, the first is the
@@ -212,7 +275,10 @@ Napi::Value GetFileProviderLogPath(const Napi::CallbackInfo& info) {
 Napi::Object Init(Napi::Env env, Napi::Object exports) {
   exports.Set("addDomain", Napi::Function::New(env, AddDomain));
   exports.Set("removeAllDomains", Napi::Function::New(env, RemoveAllDomains));
-  exports.Set("getFileProviderLogPath", Napi::Function::New(env, GetFileProviderLogPath));
+  exports.Set("getUserVisiblePath",
+              Napi::Function::New(env, GetUserVisiblePath));
+  exports.Set("getFileProviderLogPath",
+              Napi::Function::New(env, GetFileProviderLogPath));
   return exports;
 }
 

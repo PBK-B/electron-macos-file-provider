@@ -56,9 +56,26 @@ function addDomain(id, name, options, callback = function () { }) {
     );
 }
 
-function getFileProviderLogPath(){
-    assertion(); 
-    return efphelper.getFileProviderLogPath;
+function getUserVisiblePath(identifier, displayName = '') {
+    return new Promise((resolve, reject) => {
+        try {
+            assertion();
+            efphelper.getUserVisiblePath(identifier, displayName, (path, err) => {
+                if (err) {
+                    reject(err)
+                    return
+                }
+                resolve(path)
+            })
+        } catch (error) {
+            reject(error)
+        }
+    });
+}
+
+function getFileProviderLogPath() {
+    assertion();
+    return efphelper.getFileProviderLogPath();
 }
 
 // export default {
@@ -74,4 +91,5 @@ function getFileProviderLogPath(){
 
 exports.addDomain = addDomain
 exports.removeAllDomains = removeAllDomains
+exports.getUserVisiblePath = getUserVisiblePath
 exports.getFileProviderLogPath = getFileProviderLogPath
