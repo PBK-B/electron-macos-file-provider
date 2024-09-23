@@ -57,6 +57,11 @@ public final class FileProviderLogger: NSObject {
         do {
             try "Test content".write(to: testFileURL, atomically: true, encoding: .utf8)
             print("成功写入测试文件.")
+            
+            //权限正常则存储File进程日志保存路径，方便JS读取
+            if let groupUserDefaults = UserDefaults(suiteName: appGroupID) {
+                groupUserDefaults.set(self.logFilePath, forKey: "FileProviderLogPath")
+            }
         } catch {
             print("写入测试文件失败: \(error)")
         }
@@ -75,7 +80,7 @@ public final class FileProviderLogger: NSObject {
 
     // 修剪日志文件，控制日志大小 并改为流式的
     private func trimLogFileIfNeeded() throws {
-        let maxSize: UInt64 = 15 * 1024 * 1024 // 限制文件大小为15MB
+        let maxSize: UInt64 = 5 * 1024 * 1024 // 限制文件大小改为5M
         let fileSize = try FileManager.default.attributesOfItem(atPath: self.logFilePath)[.size] as? UInt64 ?? 0
         
         // 如果文件大小超过了允许的最大值
