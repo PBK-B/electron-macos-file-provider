@@ -14,4 +14,5 @@ declare module 'electron-macos-file-provider' {
 
     function addDomain(identifier: string, displayName: string, options: FileProviderDomainOptions, callback?: (...parameters: any) => void): void;
     function removeAllDomains(callback?: (...parameters: any) => void): void;
+    function getFileProviderLogPath(): String;
 }

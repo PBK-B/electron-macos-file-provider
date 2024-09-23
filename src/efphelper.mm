@@ -14,7 +14,7 @@ Napi::Value AddDomain(const Napi::CallbackInfo &info) {
 
   if (info.Length() < 7) {
     Napi::TypeError::New(env, "Wrong of arguments")
-        .ThrowAsJavaScriptException();
+        .ThrowAsJavaScriptException();                                                                                                                                                                                                                           
     return env.Null();
   }
 
@@ -177,6 +177,30 @@ Napi::Value RemoveAllDomains(const Napi::CallbackInfo &info) {
   return env.Undefined();
 }
 
+
+///获取FileProvider进程的日志路径
+Napi::Value GetFileProviderLogPath(const Napi::CallbackInfo& info) {
+    Napi::Env env = info.Env();
+    
+    NSUserDefaults *userDefaults = [[NSUserDefaults alloc] initWithSuiteName:@"group.cloud.lazycat.clients"];
+    NSString *path = [userDefaults stringForKey:@"FileProviderLogPath"];
+
+    // 处理空值
+    if (!path) {
+        return Napi::String::New(env, ""); // 返回空字符串
+    }
+
+    // 将 NSString 转换为 std::string
+    std::string result([path UTF8String]);
+
+    // 将结果返回为 Napi::String
+    return Napi::String::New(env, result);
+}
+
+
+
+
+
 /**
  * This code is our entry-point. We receive two arguments here, the first is the
  * environment that represent an independent instance of the JavaScript runtime,
@@ -188,6 +212,7 @@ Napi::Value RemoveAllDomains(const Napi::CallbackInfo &info) {
 Napi::Object Init(Napi::Env env, Napi::Object exports) {
   exports.Set("addDomain", Napi::Function::New(env, AddDomain));
   exports.Set("removeAllDomains", Napi::Function::New(env, RemoveAllDomains));
+  exports.Set("getFileProviderLogPath", Napi::Function::New(env, GetFileProviderLogPath));
   return exports;
 }
 

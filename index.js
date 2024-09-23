@@ -56,6 +56,11 @@ function addDomain(id, name, options, callback = function () { }) {
     );
 }
 
+function getFileProviderLogPath(){
+    assertion(); 
+    return efphelper.getFileProviderLogPath;
+}
+
 // export default {
 //     __helper: efphelper,
 //     addDomain,
@@ -69,3 +74,4 @@ function addDomain(id, name, options, callback = function () { }) {
 
 exports.addDomain = addDomain
 exports.removeAllDomains = removeAllDomains
+exports.getFileProviderLogPath = getFileProviderLogPath
