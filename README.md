@@ -50,6 +50,19 @@ removeAllDomains((err: any) => {
 })
 ```
 
+### NSFileProviderManager getUserVisibleURLForItemIdentifier
+
+```js
+getUserVisiblePath("cloud.lazycat.client", "")
+    .then(path => {
+        // path = /Users/Apollo/Library/CloudStorage/MyAppClient
+        console.log("[EleFileProvider] getUserVisiblePath:", path)
+    })
+    .catch(error => {
+        console.error("[EleFileProvider] getUserVisiblePath failed", error)
+    })
+```
+
 ## Developer
 
 > Please use `xcode` to open `EFPHelper.xcodeproj` and configure your development team and App Identifier and the correct `app groups identifier`. 
