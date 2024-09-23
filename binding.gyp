@@ -4,7 +4,7 @@
             "target_name": "efphelper",
             "cflags!": ["-fno-exceptions"],
             "cflags_cc!": ["-fno-exceptions"],
-            "sources": ["src/efphelper.mm"],
+            # "sources": ["src/efphelper.mm"],
             "dependencies": [
                 "<!(node -p \"require('node-addon-api').targets\"):node_addon_api",
             ],

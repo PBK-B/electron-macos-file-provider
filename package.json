@@ -1,9 +1,10 @@
 {
     "name": "electron-macos-file-provider",
-    "version": "1.0.8",
+    "version": "1.0.10",
     "description": "Apple FileProvider for macos using the N-API extension electron",
     "type": "commonjs",
     "main": "index.js",
+    "typings": "index.d.ts",
     "directories": {
         "doc": "docs"
     },
@@ -18,7 +19,6 @@
         "README.md",
         "LICENSE",
         "package.json",
-        "node_modules",
         "binding.gyp",
         "./src",
         "./index.js",
@@ -47,7 +47,7 @@
     "homepage": "https://github.com/PBK-B/electron-macos-file-provider#readme",
     "dependencies": {
         "bindings": "^1.5.0",
-        "node-addon-api": "*"
+        "node-addon-api": "8.1.0"
     },
     "devDependencies": {
         "node-gyp": "^10.2.0"
