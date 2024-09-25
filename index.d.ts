@@ -14,6 +14,6 @@ declare module 'electron-macos-file-provider' {
 
     function addDomain(identifier: string, displayName: string, options: FileProviderDomainOptions, callback?: (...parameters: any) => void): void;
     function removeAllDomains(callback?: (...parameters: any) => void): void;
-    function getUserVisiblePath(identifier: string, displayName?: string): Promise<String>;
-    function getFileProviderLogPath(): String;
+    function getUserVisiblePath(identifier: string, displayName?: string): Promise<string>;
+    function getFileProviderLogPath(): string;
 }
