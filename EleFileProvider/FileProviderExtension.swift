@@ -19,12 +19,14 @@ class FileProviderExtension: NSObject, NSFileProviderReplicatedExtension {
                let cookie = groupUserDefaults.string(forKey: "WebDAV——Cookie") {
                 FileProviderLogger.logAppInformation("Cookie读取成功：URL: \(fileProviderURL) Cookie: \(cookie)")
                 let webDAV = WebDAV(baseURL: fileProviderURL, port: 443, cookie: cookie)
+                self.checkSocks5Proxy()
                 return WebDAVFileManager(webDAV: webDAV)
             }else if let password = groupUserDefaults.string(forKey: "WebDAV——Userpassword"),
                      let userName = groupUserDefaults.string(forKey: "WebDAV——Username"),
                      let fileProviderURL = groupUserDefaults.string(forKey: "WebDAV——URL"){
                 FileProviderLogger.logAppInformation("用户名读取读取成功：URL: \(password) Cookie: \(userName)")
                 let webDAV = WebDAV(baseURL: fileProviderURL, port: 443, username: userName, password: password)
+                self.checkSocks5Proxy()
                 return WebDAVFileManager(webDAV: webDAV)
             }
             
@@ -66,7 +68,53 @@ class FileProviderExtension: NSObject, NSFileProviderReplicatedExtension {
         logger.debug("初始化")
     }
 
-    func invalidate() {}
+    func invalidate() {
+        Socks5ProxyManager.shared.disableProxy()
+    }
+    
+    
+    func checkSocks5Proxy() {
+        // 尝试获取共享的用户默认设置
+        guard let groupUserDefaults = UserDefaults(suiteName: "group.cloud.lazycat.clients") else {
+            FileProviderLogger.logAppInformation("无法获取共享用户默认设置")
+            return
+        }
+
+        // 尝试从用户默认设置中获取 SOCKS5 URL 字符串
+        guard let socks5UrlString = groupUserDefaults.string(forKey: "WedDAV-Socks5"),
+              let socks5Url = URL(string: socks5UrlString) else {
+            FileProviderLogger.logAppInformation("无效的 SOCKS5 URL 字符串或无法创建 URL")
+            return
+        }
+
+        // 获取主机名（域名）
+        guard let host = socks5Url.host else {
+            FileProviderLogger.logAppInformation("SOCKS5 URL 缺少主机名")
+            return
+        }
+
+        // 获取端口号，如果未指定则根据协议使用默认值
+        let port: Int
+        if let specifiedPort = socks5Url.port {
+            port = specifiedPort
+        } else {
+            // 默认 Socks5 端口是 1080, 如果不是 SOCKS5 协议，返回错误
+            guard socks5Url.scheme == "socks5" else {
+                FileProviderLogger.logAppInformation("未指定端口且协议不是 SOCKS5")
+                return
+            }
+            port = 1080
+        }
+
+        // 配置 SOCKS5 代理
+        Socks5ProxyManager.shared.configureProxy(host: host, port: port)
+        
+        // 开启 SOCKS5 代理
+        Socks5ProxyManager.shared.enableProxy()
+        
+        FileProviderLogger.logAppInformation("SOCKS5 代理已配置：主机 \(host)，端口 \(port)")
+    }
+    
 
     func startProvidingItem(at url: URL, completionHandler: @escaping ((Error?) -> Void)) {
         FileProviderLogger.logAppInformation("URL拓展：拓展处理")
