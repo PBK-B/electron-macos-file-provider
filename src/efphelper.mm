@@ -8,6 +8,7 @@
 #include <FileProvider/FileProvider.h>
 #include <Foundation/Foundation.h>
 #include <__config>
+#include <cstdio>
 #include <string>
 #include <thread>
 
@@ -44,6 +45,8 @@ Napi::Value AddDomain(const Napi::CallbackInfo &info) {
   Napi::Value passwordStr = info[4]; // WebDAV password
   Napi::Value cookieStr = info[5];   // WebDAV cookie
 
+  Napi::Object optionsValue = info[7].As<Napi::Object>(); // Options value
+
   if (@available(macOS 11.0, *)) {
 
     NSString *identifier =
@@ -69,6 +72,24 @@ Napi::Value AddDomain(const Napi::CallbackInfo &info) {
                            : [NSString stringWithUTF8String:cookieStr.ToString()
                                                                 .Utf8Value()
                                                                 .c_str()];
+
+    NSString *wdProxyHttp =
+        (optionsValue.IsNull() || !optionsValue.Has("proxy_http") ||
+         optionsValue.Get("proxy_http").IsUndefined())
+            ? NULL
+            : [NSString stringWithUTF8String:optionsValue.Get("proxy_http")
+                                                 .ToString()
+                                                 .Utf8Value()
+                                                 .c_str()];
+
+    NSString *wdProxySocks5 =
+        (optionsValue.IsNull() || !optionsValue.Has("proxy_socks5") ||
+         optionsValue.Get("proxy_socks5").IsUndefined())
+            ? NULL
+            : [NSString stringWithUTF8String:optionsValue.Get("proxy_socks5")
+                                                 .ToString()
+                                                 .Utf8Value()
+                                                 .c_str()];
 
     NSString *appGroupId = @"group.cloud.lazycat.clients";
     NSURL *appGroupURL = [[NSFileManager defaultManager]
@@ -101,6 +122,19 @@ Napi::Value AddDomain(const Napi::CallbackInfo &info) {
       printf("[FileProvider] Ohhhh! Maybe there is no authentication "
              "information connected to webdav.\n");
     }
+    if (wdProxyHttp || wdProxySocks5) {
+      if (wdProxyHttp == NULL) {
+        [userDefaults removeObjectForKey:@"WedDAV-Http"];
+      } else {
+        [userDefaults setObject:wdProxyHttp forKey:@"WedDAV-Http"];
+      }
+      if (wdProxySocks5 == NULL) {
+        [userDefaults removeObjectForKey:@"WedDAV-Socks5"];
+      } else {
+        [userDefaults setObject:wdProxySocks5 forKey:@"WedDAV-Socks5"];
+      }
+    }
+
     [userDefaults synchronize];
 
     NSFileProviderDomain *domain =

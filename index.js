@@ -44,6 +44,7 @@ function addDomain(id, name, options, callback = function () { }) {
     // 4. WebDAV user auth password
     // 5. WebDAV user cookie
     // 6. domain add callback function
+    // 7. option values
 
     efphelper.addDomain(
         id,
@@ -52,7 +53,11 @@ function addDomain(id, name, options, callback = function () { }) {
         options?.user ?? undefined,
         options?.password ?? null,
         options?.cookie ?? null,
-        callback
+        callback,
+        {
+            "proxy_http": options?.proxy_http,
+            "proxy_socks5": options?.proxy_socks5
+        }
     );
 }
 

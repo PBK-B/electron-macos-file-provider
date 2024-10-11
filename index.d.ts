@@ -10,6 +10,8 @@ declare module 'electron-macos-file-provider' {
         user?: string,
         password?: string,
         cookie?: string,
+        proxy_http?: string,
+        proxy_socks5?: string,
     }
 
     function addDomain(identifier: string, displayName: string, options: FileProviderDomainOptions, callback?: (...parameters: any) => void): void;
