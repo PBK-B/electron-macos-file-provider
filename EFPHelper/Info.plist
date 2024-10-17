@@ -2,9 +2,17 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>ApplicationGroupContainers</key>
+	<array>
+		<string>$(TeamIdentifierPrefix)group.cloud.lazycat.clients</string>
+	</array>
+	<key>NSFileProviderDomain</key>
+	<array>
+		<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	</array>
 	<key>com.apple.security.application-groups</key>
 	<array>
-		<string>group.cloud.lazycat.clients</string>
+		<string>$(TeamIdentifierPrefix)group.cloud.lazycat.clients</string>
 	</array>
 </dict>
 </plist>

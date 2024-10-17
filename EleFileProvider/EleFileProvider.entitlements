@@ -8,7 +8,7 @@
 	<true/>
 	<key>com.apple.security.application-groups</key>
 	<array>
-		<string>group.cloud.lazycat.clients</string>
+		<string>$(TeamIdentifierPrefix)group.cloud.lazycat.clients</string>
 	</array>
 	<key>com.apple.security.assets.movies.read-write</key>
 	<true/>
