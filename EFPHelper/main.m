@@ -9,18 +9,86 @@
 #import "FileProvider/NSFileProviderManager.h"
 #import "OSLog/OSLog.h"
 #import "EFPHelper-Swift.h"
-//执行挂载
+
+// 执行挂载
 void mountWebDAVForFileProvider(void) {
     // 在异步队列中执行挂载操作
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSLog(@"执行挂载操作");
+
         NSString *domainIdentifier = @"cloud.lazycat.client";
         NSString *domainDisplayName = @"懒猫微服";
         NSFileProviderDomain *domain = [[NSFileProviderDomain alloc] initWithIdentifier:domainIdentifier displayName:domainDisplayName];
-        [NSFileProviderManager  removeDomain:domain completionHandler:^(NSError * _Nullable error) {
-            [NSFileProviderManager addDomain:domain completionHandler:^(NSError * _Nullable error) {
-                          printf("err %s \n", [error.debugDescription UTF8String]);
-                      }];
+
+        // 获取当前所有的 domains，检查是否已经存在
+        [NSFileProviderManager getDomainsWithCompletionHandler:^(NSArray<NSFileProviderDomain *> * _Nonnull existingDomains, NSError * _Nullable error) {
+            if (error) {
+                NSLog(@"获取 domains 时发生错误: %@", error);
+                return;
+            }
+
+            BOOL domainExists = NO;
+            for (NSFileProviderDomain *existingDomain in existingDomains) {
+                if ([existingDomain.identifier isEqualToString:domainIdentifier]) {
+                    domainExists = YES;
+                    break;
+                }
+            }
+
+            if (domainExists) {
+                NSLog(@"Domain 已存在，移除旧的 domain 并重新添加");
+
+                // 移除旧的 domain
+                [NSFileProviderManager removeDomain:domain completionHandler:^(NSError * _Nullable removeError) {
+                    if (removeError) {
+                        NSLog(@"移除旧 domain 时发生错误: %@", removeError);
+                    }
+
+                    // 添加新的 domain
+                    [NSFileProviderManager addDomain:domain completionHandler:^(NSError * _Nullable addError) {
+                        if (addError) {
+                            printf("挂载失败，错误: %s \n", [addError.debugDescription UTF8String]);
+
+                            // 仅在 macOS 平台上执行强制刷新
+                            #if TARGET_OS_MAC
+                            NSFileProviderManager *manager = [NSFileProviderManager managerForDomain:domain];
+                            [manager signalEnumeratorForContainerItemIdentifier:@"root" completionHandler:^(NSError * _Nullable signalError) {
+                                if (signalError) {
+                                    NSLog(@"强制刷新时发生错误: %@", signalError);
+                                } else {
+                                    NSLog(@"强制刷新成功");
+                                }
+                            }];
+                            #endif
+                        } else {
+                            printf("挂载成功\n");
+                        }
+                    }];
+                }];
+            } else {
+                NSLog(@"Domain 不存在，直接添加新 domain");
+
+                // 直接添加新的 domain
+                [NSFileProviderManager addDomain:domain completionHandler:^(NSError * _Nullable addError) {
+                    if (addError) {
+                        printf("挂载失败，错误: %s \n", [addError.debugDescription UTF8String]);
+
+                        // 仅在 macOS 平台上执行强制刷新
+                        #if TARGET_OS_MAC
+                        NSFileProviderManager *manager = [NSFileProviderManager managerForDomain:domain];
+                        [manager signalEnumeratorForContainerItemIdentifier:@"root" completionHandler:^(NSError * _Nullable signalError) {
+                            if (signalError) {
+                                NSLog(@"强制刷新时发生错误: %@", signalError);
+                            } else {
+                                NSLog(@"强制刷新成功");
+                            }
+                        }];
+                        #endif
+                    } else {
+                        printf("挂载成功\n");
+                    }
+                }];
+            }
         }];
     });
 }
