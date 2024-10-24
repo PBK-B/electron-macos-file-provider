@@ -6,8 +6,8 @@ import WebDavKit
 
 let logger = Logger(subsystem: "com.example.myapp", category: "FileProviderExtension")
 //// 存储参数的键
-//private let urlKey = "storedURL"
-//private let cookieKey = "storedCookie"
+// private let urlKey = "storedURL"
+// private let cookieKey = "storedCookie"
 class FileProviderExtension: NSObject, NSFileProviderReplicatedExtension {
     let domain: NSFileProviderDomain
     var manager: NSFileProviderManager
@@ -16,20 +16,22 @@ class FileProviderExtension: NSObject, NSFileProviderReplicatedExtension {
         if let groupUserDefaults = UserDefaults(suiteName: "group.cloud.lazycat.clients") {
             FileProviderLogger.logAppInformation("开始读取数据")
             if let fileProviderURL = groupUserDefaults.string(forKey: "WebDAV——URL"),
-               let cookie = groupUserDefaults.string(forKey: "WebDAV——Cookie") {
+               let cookie = groupUserDefaults.string(forKey: "WebDAV——Cookie")
+            {
                 FileProviderLogger.logAppInformation("Cookie读取成功：URL: \(fileProviderURL) Cookie: \(cookie)")
                 let webDAV = WebDAV(baseURL: fileProviderURL, port: 443, cookie: cookie)
-                self.checkSocks5Proxy()
+                checkSocks5Proxy()
                 return WebDAVFileManager(webDAV: webDAV)
-            }else if let password = groupUserDefaults.string(forKey: "WebDAV——Userpassword"),
-                     let userName = groupUserDefaults.string(forKey: "WebDAV——Username"),
-                     let fileProviderURL = groupUserDefaults.string(forKey: "WebDAV——URL"){
+            } else if let password = groupUserDefaults.string(forKey: "WebDAV——Userpassword"),
+                      let userName = groupUserDefaults.string(forKey: "WebDAV——Username"),
+                      let fileProviderURL = groupUserDefaults.string(forKey: "WebDAV——URL")
+            {
                 FileProviderLogger.logAppInformation("用户名读取读取成功：URL: \(password) Cookie: \(userName)")
                 let webDAV = WebDAV(baseURL: fileProviderURL, port: 443, username: userName, password: password)
-                self.checkSocks5Proxy()
+                checkSocks5Proxy()
                 return WebDAVFileManager(webDAV: webDAV)
             }
-            
+
             else {
                 FileProviderLogger.logAppInformation("读取失败：URL: \(String(describing: groupUserDefaults.string(forKey: "WebDAV——URL"))) Cookie: \(String(describing: groupUserDefaults.string(forKey: "WebDAV——Cookie"))) \(groupUserDefaults)")
             }
@@ -37,20 +39,21 @@ class FileProviderExtension: NSObject, NSFileProviderReplicatedExtension {
             FileProviderLogger.logAppInformation("无法初始化 UserDefaults")
         }
         FileProviderLogger.logAppInformation("WAD|错误：group取值失败")
-        
-        //测试
-        
+
+        // 测试
+
         let testDefaults = UserDefaults(suiteName: "groups.cloud.lazycat.clients")
         testDefaults?.set("https://test.url", forKey: "TestURL")
         testDefaults?.set("test-cookie", forKey: "TestCookie")
         testDefaults?.synchronize()
         if let testURL = testDefaults?.string(forKey: "TestURL"),
-           let testCookie = testDefaults?.string(forKey: "TestCookie") {
+           let testCookie = testDefaults?.string(forKey: "TestCookie")
+        {
             FileProviderLogger.logAppInformation("WAD|测试读取成功：\(testURL) \(testCookie)")
         } else {
             FileProviderLogger.logAppInformation("WAD|测试读取失败")
         }
-        
+
         return nil
     }
 
@@ -71,8 +74,7 @@ class FileProviderExtension: NSObject, NSFileProviderReplicatedExtension {
     func invalidate() {
         Socks5ProxyManager.shared.disableProxy()
     }
-    
-    
+
     func checkSocks5Proxy() {
         // 尝试获取共享的用户默认设置
         guard let groupUserDefaults = UserDefaults(suiteName: "group.cloud.lazycat.clients") else {
@@ -82,7 +84,8 @@ class FileProviderExtension: NSObject, NSFileProviderReplicatedExtension {
 
         // 尝试从用户默认设置中获取 SOCKS5 URL 字符串
         guard let socks5UrlString = groupUserDefaults.string(forKey: "WedDAV-Socks5"),
-              let socks5Url = URL(string: socks5UrlString) else {
+              let socks5Url = URL(string: socks5UrlString)
+        else {
             FileProviderLogger.logAppInformation("无效的 SOCKS5 URL 字符串或无法创建 URL")
             return
         }
@@ -108,13 +111,12 @@ class FileProviderExtension: NSObject, NSFileProviderReplicatedExtension {
 
         // 配置 SOCKS5 代理
         Socks5ProxyManager.shared.configureProxy(host: host, port: port)
-        
+
         // 开启 SOCKS5 代理
         Socks5ProxyManager.shared.enableProxy()
-        
+
         FileProviderLogger.logAppInformation("SOCKS5 代理已配置：主机 \(host)，端口 \(port)")
     }
-    
 
     func startProvidingItem(at url: URL, completionHandler: @escaping ((Error?) -> Void)) {
         FileProviderLogger.logAppInformation("URL拓展：拓展处理")
